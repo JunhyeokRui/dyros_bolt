@@ -1860,7 +1860,9 @@ void StateManager::StateEstimate()
         rd_.imu_ang_vel_before = q_dot_virtual_.segment<3>(3);
 
         // mod_base_vel
-
+        
+        pelvis_velocity_estimate_ = pelv_v;
+        pelvis_position_estimate_ = pelv_x;
         static Vector3d base_vel_lpf = mod_base_vel;
         base_vel_lpf = DyrosMath::lpf(mod_base_vel, base_vel_lpf, 2000, 3);
 

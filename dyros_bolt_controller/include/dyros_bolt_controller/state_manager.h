@@ -128,6 +128,8 @@ public:
     Eigen::VectorVQd q_ddot_virtual_;
 
     Eigen::Vector3d pelvis_velocity_estimate_;
+    Eigen::Vector3d pelvis_position_estimate_;
+
 
     float control_time_ = 0;
 
