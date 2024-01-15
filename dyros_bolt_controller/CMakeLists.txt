@@ -24,7 +24,7 @@ find_package(catkin REQUIRED COMPONENTS
   dyros_bolt_description
   dyros_bolt_msgs
 )
-find_package(dyros_bolt_cc QUIET)
+# find_package(dyros_bolt_cc QUIET)
 # find_package(dwbc REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Boost REQUIRED COMPONENTS system thread)
@@ -122,7 +122,7 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES dyros_bolt_controller
   CATKIN_DEPENDS actionlib realtime_tools eigen_conversions geometry_msgs roscpp roslib sensor_msgs std_msgs mujoco_ros_msgs dyros_bolt_lib dyros_bolt_description dyros_bolt_msgs 
-  dyros_bolt_cc
+  # dyros_bolt_cc
 #  DEPENDS system_lib
 )
 
@@ -131,10 +131,10 @@ execute_process(COMMAND uname -r OUTPUT_VARIABLE UNAME_RES OUTPUT_STRIP_TRAILING
 message(" Controller : simulation only compile mode ")
 ADD_DEFINITIONS(-DCOMPILE_SIMULATION)
 
-IF(dyros_bolt_cc_FOUND)
-  message(" -- dyros_bolt_cc found" )
-  ADD_DEFINITIONS(-DCOMPILE_DYROS_BOLT_CC)
-ENDIF()
+# IF(dyros_bolt_cc_FOUND)
+#   message(" -- dyros_bolt_cc found" )
+#   ADD_DEFINITIONS(-DCOMPILE_DYROS_BOLT_CC)
+# ENDIF()
 
 ###########
 ## Build ##
@@ -147,20 +147,13 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
-  ${dyros_bolt_cc_INCLUDE_DIRS}
+  # ${dyros_bolt_cc_INCLUDE_DIRS}
 )
 
 file(GLOB_RECURSE HeaderFiles "include/*.h")
 add_custom_target(dyros_bolt_control_headers SOURCES ${HeaderFiles})
-file(GLOB BRIDGE_SRC
-    "src/real_robot_interface.cpp"
-    "src/mujoco_interface.cpp"
-    "src/control_base.cpp"
-    )
+
 file(GLOB CONTROLLER_SRC
-    "src/dyros_bolt_model.cpp"
-    "src/joint_controller.cpp"
-    # "src/jumping_controller.cpp"
     "src/odrive_socketcan.cpp"
     "src/state_manager.cpp"
     "src/dyros_bolt_controller.cpp"
@@ -172,7 +165,6 @@ file(GLOB CONTROLLER_SRC
 # )
 
 add_library(${PROJECT_NAME}_lib
-    ${BRIDGE_SRC}
     ${CONTROLLER_SRC}
     )
 
@@ -208,7 +200,7 @@ target_link_libraries(${PROJECT_NAME}_lib
     -L/usr/local/lib
     -lrbdl
     -lrbdl_urdfreader
-    ${dyros_bolt_cc_LIBRARIES}
+    # ${dyros_bolt_cc_LIBRARIES}
     # dwbc
     -lpthread
     # -lqpOASES

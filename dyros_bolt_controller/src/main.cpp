@@ -1,11 +1,6 @@
 #include <ros/ros.h>
-#include "dyros_bolt_controller/mujoco_interface.h"
-#include "dyros_bolt_controller/real_robot_interface.h"
-
 #include "dyros_bolt_controller/dyros_bolt_controller.h"
 
-
-using namespace dyros_bolt_controller;
 
 #include <math.h>
 
