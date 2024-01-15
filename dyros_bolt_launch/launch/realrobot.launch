@@ -1,0 +1,28 @@
+<launch>
+    
+    <node name="dyros_gui" pkg="dyros_gui" type="dyros_gui" />
+    
+    
+    
+    <arg name="lower" default="true"/>
+    <arg name="init" default="false"/>
+    <arg name="node_start_delay" default="0.2" />  
+    
+    
+    <param name="dyros_bolt_controller/urdf_path" type="string" value="$(find dyros_bolt_description)/mujoco_model/bolt_6dof.urdf"/>
+    
+    <node name="dyros_bolt_controller_shm_reset" pkg="dyros_bolt_controller" type="shm_reset" output="screen"/>
+    
+    <node name="dyros_bolt_controller" pkg="dyros_bolt_controller" type="dyros_bolt_controller" output="screen" respawn="false" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
+        <rosparam file="$(find dyros_bolt_controller)/odrive_config/odrive.yaml" />
+        <rosparam file="$(find dyros_bolt_controller)/odrive_config/gain.yaml" />
+        <param name="sim_mode" value="false"/>
+        <rosparam command="load" file="$(find dyros_bolt_description)/setting/setting_realrobot_positionPDgain.yaml"/>
+        <rosparam command="load" file="$(find dyros_bolt_description)/setting/setting_realrobot_parameters.yaml"/>
+    </node>
+
+    <node name="dyros_bolt_sensor" pkg="dyros_bolt_sensor" type="dyros_bolt_sensor" output="screen" respawn="false" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
+
+    </node>
+
+</launch>
