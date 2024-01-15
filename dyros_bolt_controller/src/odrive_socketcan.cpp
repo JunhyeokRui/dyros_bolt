@@ -1,5 +1,5 @@
 #include "dyros_bolt_controller/odrive_socketcan.h"
-std::ofstream outFile("/home/yong/data.txt");
+// std::ofstream outFile("/home/yong/data.txt");
 
 namespace odrive {
     ODriveSocketCan::ODriveSocketCan(ros::NodeHandle &nh):

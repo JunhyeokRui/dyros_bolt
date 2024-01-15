@@ -19,8 +19,11 @@ namespace dyros_bolt_controller
 class RealRobotInterface : public ControlBase
 {
 public:
+    SHMmsgs *tc_shm_;
+    int shm_id_;
+
     RealRobotInterface(ros::NodeHandle &nh, double Hz);
-    virtual ~RealRobotInterface() { }
+    virtual ~RealRobotInterface() { deleteSharedMemory(shm_id_, tc_shm_); }
 
     virtual void readDevice() override;
     virtual void update() override; // update controller based on readdevice

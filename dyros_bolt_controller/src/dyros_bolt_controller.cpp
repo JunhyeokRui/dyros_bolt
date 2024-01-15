@@ -3,9 +3,15 @@
 // #include "dyros_bolt_controller/real_robot_interface.h"
 // using namespace dyros_bolt_controller;
 
-// #include <math.h>
+#include <math.h>
 
+// volatile bool *prog_shutdown;
 
+// void SIGINT_handler(int sig)
+// {
+//     cout << " CNTRL : shutdown Signal" << endl;
+//     *prog_shutdown = true;
+// }
 
 // int main(int argc, char **argv)
 // {
@@ -17,6 +23,9 @@
 //     ControlBase *ctr_obj;
 //     ROS_INFO("!!!!!!!");
     
+    // int shm_id_;
+    // init_shm(shm_msg_key, shm_id_, &ctr_obj->tc_shm_);
+    // prog_shutdown = &ctr_obj->tc_shm_->shutdown;
 
 //     double Hz;
 //     nh.param<double>("control_frequency", Hz, 200.0);

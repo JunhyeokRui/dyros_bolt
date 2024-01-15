@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   eigen_conversions
   roscpp
   dyros_bolt_msgs
+  mujoco_ros_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -105,7 +106,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
    INCLUDE_DIRS include
    LIBRARIES dyros_bolt_lib rbdl rbdl_urdfreader qpOASES
-   CATKIN_DEPENDS eigen_conversions roscpp dyros_bolt_msgs
+   CATKIN_DEPENDS eigen_conversions roscpp dyros_bolt_msgs mujoco_ros_msgs
    #DEPENDS system_lib
 )
 

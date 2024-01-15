@@ -8,7 +8,7 @@
 #include <ros/package.h>
 #include <rbdl/rbdl.h>
 // #include <rbdl/addons/urdfreader/urdfreader.h>
-#include <libdwbc/dwbc.h>
+// #include <libdwbc/dwbc.h>
 #include "math_type_define.h"
 
 // #define MODEL_DOF 6
@@ -155,7 +155,7 @@ private:
     Eigen::Vector6d q_virtual_1;
     Eigen::Vector6d q_dot_virtual_1;
 
-    // Eigen::Matrix28d A_;
+    Eigen::MatrixXd A_;
     Eigen::MatrixXd A_temp_;
 
 };

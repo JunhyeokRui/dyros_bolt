@@ -42,6 +42,7 @@
 #include "dyros_bolt_controller/joint_controller.h"
 // #include "dyros_bolt_controller/jumping_controller.h"
 #include "dyros_bolt_controller/dyros_bolt_model.h"
+#include "shm_msgs.h"
 
 
 
@@ -122,8 +123,11 @@ protected:
     Vector6d right_foot_ft_; // current right ft sensor values
 
     tf::Quaternion imu_data_; ///< IMU data with filter
+    Vector4d imu_data_quat; 
     Vector3d gyro_; // current gyro sensor values
     Vector3d accelometer_; // current accelometer values
+    Vector3d imu_accelometer_; // current accelometer values
+    Vector3d imu_angular_velocity;
     Vector3d imu_grav_rpy_;
     Matrix3d pelvis_orientation_;
 

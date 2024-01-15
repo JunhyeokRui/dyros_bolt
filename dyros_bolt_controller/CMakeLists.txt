@@ -25,7 +25,7 @@ find_package(catkin REQUIRED COMPONENTS
   dyros_bolt_msgs
 )
 find_package(dyros_bolt_cc QUIET)
-find_package(dwbc REQUIRED)
+# find_package(dwbc REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Boost REQUIRED COMPONENTS system thread)
 
@@ -121,7 +121,8 @@ find_package(Boost REQUIRED COMPONENTS system thread)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES dyros_bolt_controller
-  CATKIN_DEPENDS actionlib realtime_tools eigen_conversions geometry_msgs roscpp roslib sensor_msgs std_msgs mujoco_ros_msgs dyros_bolt_lib dyros_bolt_description dyros_bolt_msgs dyros_bolt_cc
+  CATKIN_DEPENDS actionlib realtime_tools eigen_conversions geometry_msgs roscpp roslib sensor_msgs std_msgs mujoco_ros_msgs dyros_bolt_lib dyros_bolt_description dyros_bolt_msgs 
+  dyros_bolt_cc
 #  DEPENDS system_lib
 )
 
@@ -208,7 +209,7 @@ target_link_libraries(${PROJECT_NAME}_lib
     -lrbdl
     -lrbdl_urdfreader
     ${dyros_bolt_cc_LIBRARIES}
-    dwbc
+    # dwbc
     -lpthread
     # -lqpOASES
 )

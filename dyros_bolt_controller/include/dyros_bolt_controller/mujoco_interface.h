@@ -14,8 +14,11 @@ namespace dyros_bolt_controller {
 
 class mujoco_interface : public ControlBase{
 public:
+  SHMmsgs *tc_shm_;
+  int shm_id_;
+
   mujoco_interface(ros::NodeHandle &nh, double Hz);
-  virtual ~mujoco_interface() {}// mujocoStop(); }
+  virtual ~mujoco_interface() {deleteSharedMemory(shm_id_, tc_shm_);}// mujocoStop(); }
   
   virtual void update() override; // update controller based on readdevice
   virtual void compute() override; // compute algorithm and update all class object

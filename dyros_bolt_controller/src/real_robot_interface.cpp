@@ -1,8 +1,15 @@
 #include "dyros_bolt_controller/real_robot_interface.h"
 
+volatile bool *prog_shutdown;
+
+void SIGINT_handler(int sig)
+{
+    cout << " CNTRL : shutdown Signal" << endl;
+    *prog_shutdown = true;
+}
+
 namespace dyros_bolt_controller
 {
-std::ofstream outFile("/home/yong/data.txt");
 
 RealRobotInterface::RealRobotInterface(ros::NodeHandle &nh, double Hz):
   ControlBase(nh, Hz), rate_(Hz), odrv(nh)
@@ -11,6 +18,8 @@ RealRobotInterface::RealRobotInterface(ros::NodeHandle &nh, double Hz):
     axis_request_state_sub = nh.subscribe<std_msgs::Int16>("/odrv_axis_request_states", 1, &RealRobotInterface::axisRequestStateCallback, this);
     axis_current_state_pub = nh.advertise<std_msgs::Int16MultiArray>("/odrv_axis_current_states", 1);
 
+    init_shm(shm_msg_key, shm_id_, &tc_shm_);
+    prog_shutdown = &tc_shm_->shutdown;
 }
 
 void RealRobotInterface::axisRequestStateCallback(const std_msgs::Int16::ConstPtr& msg) {
@@ -73,6 +82,29 @@ void RealRobotInterface::readDevice()
     q_[7] = 0;
     q_dot_[3] =0;
     q_dot_[7] =0;
+
+    imu_data_quat(0) = tc_shm_->pos_virtual[0];
+    imu_data_quat(1) = tc_shm_->pos_virtual[1];
+    imu_data_quat(2) = tc_shm_->pos_virtual[2];
+    imu_data_quat(3) = tc_shm_->pos_virtual[3];
+
+    imu_accelometer_(0) = tc_shm_->imu_acc[0];
+    imu_accelometer_(1) = tc_shm_->imu_acc[1];
+    imu_accelometer_(2) = tc_shm_->imu_acc[2];
+
+    imu_angular_velocity(0) = tc_shm_->vel_virtual[0];
+    imu_angular_velocity(1) = tc_shm_->vel_virtual[1];
+    imu_angular_velocity(2) = tc_shm_->vel_virtual[2];
+
+    // std::cout << "imu_data_: " << std::endl;
+    // std::cout << imu_data_ << std::endl << std::endl;
+
+    // std::cout << "acc: " << std::endl;
+    // std::cout << imu_accelometer_ << std::endl << std::endl;
+
+    // std::cout << "angular_vel: " << std::endl;
+    // std::cout << imu_angular_velocity << std::endl << std::endl;
+
 }
 
 void RealRobotInterface::update()

@@ -52,12 +52,15 @@
   <build_depend>eigen_conversions</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>dyros_bolt_msgs</build_depend>
+  <build_depend>mujoco_ros_msgs</build_depend>
   <build_export_depend>eigen_conversions</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>dyros_bolt_msgs</build_export_depend>
+  <build_export_depend>mujoco_ros_msgs</build_export_depend>
   <exec_depend>eigen_conversions</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>dyros_bolt_msgs</exec_depend>
+  <exec_depend>mujoco_ros_msgs</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

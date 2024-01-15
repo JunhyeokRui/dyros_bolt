@@ -79,6 +79,7 @@
 		<motor name="FR_HAA" joint="FR_HAA" /> 
 		<motor name="FR_HFE" joint="FR_HFE" /> 
 		<motor name="FR_KFE" joint="FR_KFE" /> 
+        <motor name="FR_ANKLE" joint="FR_ANKLE" /> 
 		<!-- <position class="position" ctrllimited="true" ctrlrange="-3 3" name="FL_HAA" joint="FL_HAA" kp = "100"/>  -->
 		<!-- <position class="position" ctrllimited="true" ctrlrange="-3 3" name="FL_HFE" joint="FL_HFE" kp = "100"/>  -->
 		<!-- <position class="position" ctrllimited="true" ctrlrange="-3 3" name="FL_KFE" joint="FL_KFE" kp = "100"/>  -->
@@ -88,7 +89,6 @@
 		<!-- <position class="position" ctrllimited="true" ctrlrange="-3 3" name="FR_HFE" joint="FR_HFE" kp = "100"/>  -->
 		<!-- <position class="position" ctrllimited="true" ctrlrange="-3 3" name="FR_KFE" joint="FR_KFE" kp = "100"/>  -->
 		<!-- <position class="position" ctrllimited="true" ctrlrange="-3 3" name="FR_ANKLE" joint="FR_ANKLE" kp = "10"/>  -->
-		<motor name="FR_ANKLE" joint="FR_ANKLE" /> 
     </actuator>  
 
     <sensor>
@@ -103,10 +103,11 @@
 
     <keyframe>
         <key name="front" time="0" qpos="0 0 0.43 1 0 0 0
-                                        
+
                                         0 0.436332313 -0.872664626 0.436332313
                                         0 0.436332313 -0.872664626 0.436332313"/>
     </keyframe>
 </mujoco>
 <!-- 0 0 0 -0.785398163 0 0 0 -0.785398163"/> -->
                                          <!-- 0 0 0 0 0 0 0 0"/> -->
+        

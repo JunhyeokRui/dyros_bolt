@@ -1,12 +1,14 @@
 #include "dyros_bolt_controller/dyros_bolt_model.h"
+#include "fstream"
 
 
 
 namespace dyros_bolt_controller
 {
+// std::ofstream torque_txt("/home/yong/Desktop/torque.txt");
 constexpr const char* DyrosBoltModel::EE_NAME[2];
 constexpr const size_t DyrosBoltModel::HW_TOTAL_DOF;
-// constexpr const size_t DyrosBoltModel::MODEL_DOF;
+constexpr const size_t DyrosBoltModel::MODEL_DOF;
 
 constexpr const size_t DyrosBoltModel::MODEL_WITH_VIRTUAL_DOF;
   
@@ -72,9 +74,9 @@ void DyrosBoltModel::test()
     Eigen::Matrix<double, DyrosBoltModel::MODEL_WITH_VIRTUAL_DOF, 1> qdot_vjoint;
     q_vjoint.setZero();
     q_vjoint(MODEL_WITH_VIRTUAL_DOF) = 1;
-    q_vjoint << 0, 0, 0.43, 0, 0, 0,
-                0, 1.57, 0, 0,
-                0, 0, 0, 0;
+    // q_vjoint << 0, 0, 0.43, 0, 0, 0,
+    //             1.57, 1.57, 0, 0,
+    //             0, 0, 0, 0;
 
     qdot_vjoint.setZero();
 
@@ -98,27 +100,21 @@ void DyrosBoltModel::updateKinematics(const Eigen::VectorXd& q, const Eigen::Vec
     // q_virtual_dot_ = qdot;
     // q_virtual_ddot_ = qddot;
 
-
-    // rd_.UpdateKinematics(q, qdot, qddot, true);
     RigidBodyDynamics::UpdateKinematicsCustom(model_, &q, &qdot, &qddot);
 
-    // rd_.AddContactConstraint("FL_FOOT",DWBC::CONTACT_TYPE::CONTACT_6D,Vector3d(0,0,-0.0085),Vector3d(0,0,1), 0.0085, 0.06, false);
-    // rd_.AddContactConstraint("FR_FOOT",DWBC::CONTACT_TYPE::CONTACT_6D,Vector3d(0,0,-0.0085),Vector3d(0,0,1), 0.0085, 0.06, false);
-
-    // rd_.SetContact(true,true);
-    // rd_.CalcContactConstraint();
-    // rd_.CalcGravCompensation();
-    // rd_.CalcContactRedistribute();
-    VectorXd G_;
+    VectorXd G_, B_;
     G_.setZero(MODEL_WITH_VIRTUAL_DOF);
+    B_.setZero(MODEL_WITH_VIRTUAL_DOF);
 
-    // RigidBodyDynamics::NonlinearEffects(rd_.model_, q, qdot, G_);
     RigidBodyDynamics::NonlinearEffects(model_, q, qddot, G_);
+    RigidBodyDynamics::NonlinearEffects(model_, q, qdot, B_);
+
     // Gravity + Coriolis
-    // std::cout << "GRAVITY";
+    // std::cout << "GRAVITY"<<std::endl;
     // std::cout << G_.block<MODEL_DOF,1>(6,0).transpose() << std::endl;
-    // std::cout << rd_.B_ << std::endl;
-    command_Torque = G_.block<MODEL_DOF,1>(6,0);
+    // std::cout << B_.block<MODEL_DOF,1>(6,0).transpose() << std::endl;
+
+    command_Torque = B_.block<MODEL_DOF,1>(6,0);
     // command_Torque.setZero(MODEL_DOF);
 
     // getInertiaMatrixDoF(&full_inertia_mat_);
@@ -197,34 +193,6 @@ void DyrosBoltModel::getTransformEndEffector // must call updateKinematics befor
     transform_matrix->linear() = RigidBodyDynamics::CalcBodyWorldOrientation
       (model_, q_virtual_, end_effector_id_[ee], false).transpose();
 }
-
-// void DyrosBoltModel::getTransformEndEffector // must call updateKinematics before calling this function
-// (EndEffector ee, Eigen::Vector3d* position, Eigen::Matrix3d* rotation)
-// {
-//     *position = RigidBodyDynamics::CalcBodyToBaseCoordinates
-//         (model_, q_virtual_, end_effector_id_[ee], base_position_, false);
-//     *rotation = RigidBodyDynamics::CalcBodyWorldOrientation(
-//         model_, q_virtual_ , end_effector_id_[ee], false).transpose();
-// }
-
-// void DyrosBoltModel::getTransformEndEffector
-// (EndEffector ee, const Eigen::VectorXd& q, bool update_kinematics,
-//  Eigen::Vector3d* position, Eigen::Matrix3d* rotation)
-// {
-//     Eigen::Matrix<double, 12, 1> q_new;
-//     q_new = q_virtual_;
-//     q_new.segment<6>(joint_start_index_[ee]) = q;
-//     if (update_kinematics)
-//     {
-//     q_virtual_ = q_new;
-//     }
-//     *position = RigidBodyDynamics::CalcBodyToBaseCoordinates
-//         (model_,q_new,end_effector_id_[ee], base_position_, update_kinematics);
-//     *rotation = RigidBodyDynamics::CalcBodyWorldOrientation(
-//         model_, q_new, end_effector_id_[ee], update_kinematics).transpose();
-//     // RigidBodyDynamics::Calcpo
-//     // model_.mBodies[0].mCenterOfMass
-// }
 
 
 void DyrosBoltModel::getJacobianMatrix4DoF(EndEffector ee, Eigen::Matrix<double, 6, 4> *jacobian)
