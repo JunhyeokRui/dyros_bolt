@@ -140,13 +140,13 @@ void *DyrosBoltController::Thread1()
 
     signalThread1 = true;
     int thread1_count = 0;
-
+    std::cout << "thread1 test1" << std::endl;
     while (!dc_.tc_shm_->shutdown) //ANCHOR - while not shutdown
     { 
-
+        std::cout << "thread1 test2" << std::endl;
         if (dc_.triggerThread1)
         {
-
+            std::cout << "thread1 test3" << std::endl;
             dc_.triggerThread1 = false;
 
             thread1_count++;
@@ -159,7 +159,7 @@ void *DyrosBoltController::Thread1()
             auto t1 = std::chrono::steady_clock::now();
 
             queue_controller_.callAvailable(ros::WallDuration());
-
+            std::cout << "thread1 test4" << std::endl;
             //rui - Start Dyros Bolt Control
             //////////////////////////////////////////////////////////
             ////////////////////Start Dyros Bolt Controll/////////////////
@@ -492,7 +492,9 @@ void DyrosBoltController::TaskCommandCallback(const dyros_bolt_msgs::TaskCommand
     rd_.pc_mode = false;
     rd_.tc_ = *msg;
     std::cout << " CNTRL : task signal received mode :" << rd_.tc_.mode << std::endl;
+    std::cout << "test1" << std::endl;
     stm_.StatusPub("%f task Control mode : %d", (float)rd_.control_time_, rd_.tc_.mode);
+    std::cout << "test2" << std::endl;
     rd_.tc_time_ = rd_.control_time_;
     rd_.tc_run = true;
     rd_.tc_init = true;
@@ -501,6 +503,7 @@ void DyrosBoltController::TaskCommandCallback(const dyros_bolt_msgs::TaskCommand
     rd_.link_[base_link].SetInitialWithPosition();
     rd_.link_[COM_id].SetInitialWithPosition();
 
+    std::cout << "test3" << std::endl;
     if (!rd_.semode)
     {
         std::cout << " CNTRL : State Estimate is not running. disable task command" << std::endl;

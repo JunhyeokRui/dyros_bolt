@@ -1836,28 +1836,28 @@ void StateManager::StateEstimate()
             lf_s_ratio = 0.5;
         }
 
-        std::cout << "contact_right left" << std::endl;
-        std::cout << contact_right << std::endl;
-        std::cout << contact_left << std::endl;
         if (contact_right && contact_left)
         {
+            std::cout << "both" << std::endl;
             mod_base_pos = rf_cp_m * rf_s_ratio + lf_cp_m * lf_s_ratio;
             // mod_base_pos(2) = mod_base_pos(2) + ((link_[FR_LOWER_LEG].xpos(2) + link_[FR_LOWER_LEG].contact_point(2)) * rf_s_ratio/ (rf_s_ratio + lf_s_ratio) + (link_[FL_LOWER_LEG].xpos(2) + link_[FL_LOWER_LEG].contact_point(2)) * lf_s_ratio / (rf_s_ratio + lf_s_ratio));
             mod_base_vel = -RF_fixed_contact_vel.segment(3, 3) * rf_s_ratio - LF_fixed_contact_vel.segment(3, 3) * lf_s_ratio;
         }
         else if (contact_right && (!contact_left))
         {
+            std::cout << "right" << std::endl;
             mod_base_pos = rf_cp_m;
             mod_base_vel = -RF_fixed_contact_vel.segment(3, 3);
         }
         else if (contact_left && (!contact_right))
         {
+            std::cout << "left" << std::endl;
             mod_base_pos = lf_cp_m;
             mod_base_vel = -LF_fixed_contact_vel.segment(3, 3);
         }
         else
         {
-            std::cout << "whatthefuck" << std::endl;
+            // std::cout << "whatthefuck" << std::endl;
         }
 
         // if (dc.single_foot_only)
@@ -2282,7 +2282,6 @@ void StateManager::GuiCommandCallback(const std_msgs::StringConstPtr &msg)
 {
     // std::cout << "Received msg from GUI : " << msg->data << std::endl;
     // Receiving Command from GUI!
-    std::cout << "msg->data : " << msg->data << std::endl;
 
     if (msg->data == "torqueon")
     {
@@ -2334,7 +2333,6 @@ void StateManager::GuiCommandCallback(const std_msgs::StringConstPtr &msg)
     else if (msg->data == "stateestimation")
     {   
         std::cout << "stateestimation button pressed and entered state_manager.cpp" << std::endl;
-        std::cout << "rd_gl_.semode : " << rd_gl_.semode << std::endl;
         if (rd_gl_.semode)
         {
             std::cout << " STATE : stateestimation off" << std::endl;

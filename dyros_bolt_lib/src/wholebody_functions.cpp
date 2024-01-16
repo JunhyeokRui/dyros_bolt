@@ -8,8 +8,8 @@ namespace WBC
     {
         rd_.grav_ref << 0, 0, -9.81;
 
-        rd_.ee_[0].contact_point << 0.03, 0, -0.1585;
-        rd_.ee_[1].contact_point << 0.03, 0, -0.1585;
+        rd_.ee_[0].contact_point << 0, 0, -0.2;
+        rd_.ee_[1].contact_point << 0, 0, -0.2;
         // rd_.ee_[2].contact_point << 0.0, 0.0, -0.035;
         // rd_.ee_[3].contact_point << 0.0, 0.0, -0.035;
 

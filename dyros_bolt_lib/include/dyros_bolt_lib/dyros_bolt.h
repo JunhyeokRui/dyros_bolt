@@ -46,6 +46,17 @@ namespace DYROS_BOLT {
         "FR_HFE", 
         "FR_KFE"
     };
+    // static constexpr const char *LINK_NAME[MODEL_DOF + 3] = {
+    //     "base_link",
+    //     "FL_SHOULDER",
+    //     "FL_UPPER_LEG",
+    //     "FL_LOWER_LEG",
+    //     "FL_FOOT",
+    //     "FR_SHOULDER",
+    //     "FR_UPPER_LEG",
+    //     "FR_LOWER_LEG",
+    //     "FR_FOOT"
+    // };
     static constexpr const char *LINK_NAME[MODEL_DOF + 1] = {
         "base_link",
         "FL_SHOULDER",
@@ -53,7 +64,7 @@ namespace DYROS_BOLT {
         "FL_LOWER_LEG",
         "FR_SHOULDER",
         "FR_UPPER_LEG",
-        "FR_LOWER_LEG",
+        "FR_LOWER_LEG"
     };
     const std::string POSITIONACTUATOR_NAME[MODEL_DOF] = {
         "FL_HAA", 
@@ -66,6 +77,8 @@ namespace DYROS_BOLT {
     const int base_link = 0;
     const int FL_LOWER_LEG = 3;
     const int FR_LOWER_LEG = 6;
+    // const int FL_FOOT = 4;
+    // const int FR_FOOT = 8;
     const int COM_id = 7;
 
 

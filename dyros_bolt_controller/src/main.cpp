@@ -38,13 +38,11 @@ int main(int argc, char **argv)
 #ifdef COMPILE_REALROBOT
     mlockall(MCL_CURRENT | MCL_FUTURE);
 #endif
-    std::cout << "test1" << std::endl;
     ros::init(argc, argv, "dyros_bolt_controller", ros::init_options::NoSigintHandler);
     // ros::NodeHandle nh("~");
 
     DataContainer dc_;
     
-    std::cout << "test2" << std::endl;
     // std::string mode;
 
     dc_.nh.param("/dyros_bolt_controller/sim_mode", dc_.simMode, false);
@@ -52,7 +50,6 @@ int main(int argc, char **argv)
     dc_.nh.getParam("/dyros_bolt_controller/Kv", dc_.Kvs);
     // nh.param<std::string>("run_mode", mode, "simulation");
 
-    std::cout << "test3" << std::endl;
     if (dc_.Kps.size() != MODEL_DOF)
     {
         std::cout << "Kps size error ! " << dc_.Kps.size() << std::endl;
@@ -61,18 +58,12 @@ int main(int argc, char **argv)
     {
         std::cout << "Kps size error ! " << dc_.Kvs.size() << std::endl;
     }
-    std::cout << "test4" << std::endl;
     // ControlBase *ctr_obj;
     StateManager stm(dc_); //rui -
-    std::cout << "test4-1" << std::endl;
     DyrosBoltController tc_(stm); //rui
-    std::cout << "test4-2" << std::endl;
     int shm_id_;
-    std::cout << "test4-3" << std::endl;
     init_shm(shm_msg_key, shm_id_, &dc_.tc_shm_); //rui - init shared memory
-    std::cout << "test4-4" << std::endl;
     prog_shutdown = &dc_.tc_shm_->shutdown;
-    std::cout << "test5" << std::endl;
     // ROS_INFO("!!!!!!!");
 
     bool zp_load;
