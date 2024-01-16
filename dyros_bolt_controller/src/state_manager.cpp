@@ -1836,7 +1836,9 @@ void StateManager::StateEstimate()
             lf_s_ratio = 0.5;
         }
 
-
+        std::cout << "contact_right left" << std::endl;
+        std::cout << contact_right << std::endl;
+        std::cout << contact_left << std::endl;
         if (contact_right && contact_left)
         {
             mod_base_pos = rf_cp_m * rf_s_ratio + lf_cp_m * lf_s_ratio;

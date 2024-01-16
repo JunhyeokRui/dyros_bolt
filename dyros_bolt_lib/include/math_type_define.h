@@ -19,7 +19,7 @@
 #include <geometry_msgs/Pose.h>
 
 #define MODEL_DOF 6
-#define ENDEFFECTOR_NUMBER 4
+#define ENDEFFECTOR_NUMBER 2
 #define LINK_NUMBER 7
 #define MODEL_DOF_VIRTUAL 12
 #define MODEL_DOF_QVIRTUAL 13

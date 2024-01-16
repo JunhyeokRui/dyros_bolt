@@ -66,6 +66,8 @@ public:
     LinkData link_local_[LINK_NUMBER + 1];
     int link_id_[LINK_NUMBER + 1];
 
+
+
     Eigen::MatrixVVd A_;
     Eigen::MatrixVVd A_inv_;
     Eigen::MatrixXd A_temp_;
