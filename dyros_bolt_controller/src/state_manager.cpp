@@ -2,6 +2,7 @@
 #include "fstream"
 #include "algorithm"
 #include <iomanip>
+#include <sys/shm.h>
 #include <unistd.h>
 
 using namespace std;
@@ -259,7 +260,7 @@ void *StateManager::StateThread()
         if (pub_once)
         {
 
-            std::cout << "STATUS : init stm diff : " << stm_diff << "  init tcm diff : " << tcm_diff << std::endl;
+            std::cout << " STATUS : init stm diff : " << stm_diff << "  init tcm diff : " << tcm_diff << std::endl;
 
             if (stm_diff < -5000 && tcm_diff < -5000)
             {
@@ -1222,11 +1223,19 @@ void StateManager::GetSensorData()
     rd_.imu_ang_acc(0) = dc_.tc_shm_->imu_gyro[0];
     rd_.imu_ang_acc(1) = dc_.tc_shm_->imu_gyro[1];
     rd_.imu_ang_acc(2) = dc_.tc_shm_->imu_gyro[2];
+
+    rd_.base_link_xquat_rd.x() = dc_.tc_shm_->base_link_xquat[0];
+    rd_.base_link_xquat_rd.y() = dc_.tc_shm_->base_link_xquat[1];
+    rd_.base_link_xquat_rd.z() = dc_.tc_shm_->base_link_xquat[2];
+    rd_.base_link_xquat_rd.w() = dc_.tc_shm_->base_link_xquat[3];
     
     double dt_ = 0.0005;    
-    rd_.imu_lin_vel +=  0.5 * (current_acceleration_ + previous_acceleration_) * dt_;
-    previous_acceleration_ = current_acceleration_;
-    current_acceleration_ = rd_.imu_lin_acc;
+    rd_.imu_lin_vel +=  0.5 * (current_acceleration_lin + previous_acceleration_lin) * dt_;
+    rd_.imu_ang_vel += 0.5 * (current_acceleration_ang + previous_acceleration_ang) * dt_;
+    previous_acceleration_lin = current_acceleration_lin;
+    previous_acceleration_ang = current_acceleration_ang;
+    current_acceleration_lin = rd_.imu_lin_acc;
+    current_acceleration_ang = rd_.imu_ang_acc;
     
 
 

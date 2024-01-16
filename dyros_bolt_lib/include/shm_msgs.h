@@ -61,6 +61,7 @@ typedef struct SHMmsgs
     float vel_virtual[6]; //virtual vel(3) + virtual twist(3)
     float imu_acc[3];
     float imu_gyro[3];
+    float base_link_xquat[4];
 
     std::atomic<bool> imuWriting;
     float imuRaw[6];

@@ -105,7 +105,7 @@ void *DyrosBoltController::Thread1()
         }
     }
 
-    std::cout << "Thread1 Proceeding ... " << std::endl;
+    std::cout << " Thread1 Proceeding ... " << std::endl;
 
     EnableThread2(true); // Set true for Thread2
     EnableThread3(true); // True for thread3 ...
@@ -293,7 +293,7 @@ void *DyrosBoltController::Thread2()
     if (enableThread2) 
     {
 
-        std::cout << "thread2_entered" << std::endl;
+        std::cout << " CNTRL : Thread2_entered" << std::endl;
         while (!dc_.tc_shm_->shutdown) 
         {
             
@@ -326,7 +326,7 @@ void *DyrosBoltController::Thread2()
     }
     else 
     {
-        std::cout << " CNTRL : thread2 disabled" << std::endl;
+        std::cout << " CNTRL : Thread2 disabled" << std::endl;
     }
 
     std::cout << "thread2 terminate" << std::endl;

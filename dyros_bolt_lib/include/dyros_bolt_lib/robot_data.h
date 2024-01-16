@@ -73,6 +73,7 @@ struct RobotData
     Eigen::Vector3d imu_lin_vel;
     Eigen::Vector3d imu_ang_vel;
     Eigen::Vector3d imu_ang_vel_before;
+    Eigen::Quaterniond base_link_xquat_rd;
 
     double roll = 0;
     double pitch = 0;
