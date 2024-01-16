@@ -280,7 +280,7 @@ void *DyrosBoltController::Thread1()
 void *DyrosBoltController::Thread2()
 {
 
-    std::cout << "CNTRL2 : started with pid : " << getpid() << std::endl;
+    std::cout << " CNTRL2 : started with pid : " << getpid() << std::endl;
     
     while (true) 
     {
@@ -329,7 +329,7 @@ void *DyrosBoltController::Thread2()
         std::cout << " CNTRL : Thread2 disabled" << std::endl;
     }
 
-    std::cout << "thread2 terminate" << std::endl;
+    std::cout << " CNTRL : Thread2 terminate" << std::endl;
     return (void *)NULL;
 }
 
@@ -371,10 +371,10 @@ void *DyrosBoltController::Thread3()
     else 
     {
 
-        std::cout << " CNTRL : thread3 disabled" << std::endl;
+        std::cout << " CNTRL : Thread3 disabled" << std::endl;
     }
 
-    std::cout << " CNTRL : thread3 terminate" << std::endl;
+    std::cout << " CNTRL : Thread3 terminate" << std::endl;
     return (void *)NULL;
 
 }
@@ -507,6 +507,7 @@ void DyrosBoltController::TaskCommandCallback(const dyros_bolt_msgs::TaskCommand
         rd_.tc_run = false;
     }
 }
+
 
 void DyrosBoltController::TaskGainCommandCallback(const dyros_bolt_msgs::TaskGainCommandConstPtr &msg)
 {

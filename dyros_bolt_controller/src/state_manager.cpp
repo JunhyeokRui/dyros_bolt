@@ -20,7 +20,7 @@ StateManager::StateManager(DataContainer &dc_global) : dc_(dc_global), rd_gl_(dc
 
     RigidBodyDynamics::Addons::URDFReadFromFile(urdf_path.c_str(), &model_local_, true, verbose);
     RigidBodyDynamics::Addons::URDFReadFromFile(urdf_path.c_str(), &model_global_, true, verbose);
-
+    
     if (model_local_.dof_count == MODEL_DOF_VIRTUAL)
     {
         A_temp_.setZero(MODEL_DOF_VIRTUAL, MODEL_DOF_VIRTUAL);
@@ -284,6 +284,16 @@ void *StateManager::StateThread()
                     cCount = dc_.tc_shm_->commandCount;
                     torqueRatio = 1.0;
 
+                    if (dc_.avatarMode)
+                    {
+                        dc_.inityawSwitch = true;
+                        dc_.stateEstimateSwitch = true;
+                        rd_gl_.semode = true;
+
+                        rd_gl_.tc_avatar_switch = true;
+
+                        rd_gl_.avatar_reboot_signal = true;
+                    }
                 }
             }
 
@@ -559,7 +569,8 @@ void *StateManager::LoggerThread()
 
                     // std::cout << " log file compressed : " << s_count << std::endl;
                 }
-
+                
+                
                 if (switch_torqueCommandLog)
                 {
                     torqueCommandLog.open((log_folder + apd_ + torqueclogFile).c_str());
@@ -2269,6 +2280,7 @@ void StateManager::GuiCommandCallback(const std_msgs::StringConstPtr &msg)
 {
     // std::cout << "Received msg from GUI : " << msg->data << std::endl;
     // Receiving Command from GUI!
+    std::cout << "msg->data : " << msg->data << std::endl;
 
     if (msg->data == "torqueon")
     {
@@ -2318,7 +2330,9 @@ void StateManager::GuiCommandCallback(const std_msgs::StringConstPtr &msg)
         dc_.imuResetSwtich = true;
     }
     else if (msg->data == "stateestimation")
-    {
+    {   
+        std::cout << "stateestimation button pressed and entered state_manager.cpp" << std::endl;
+        std::cout << "rd_gl_.semode : " << rd_gl_.semode << std::endl;
         if (rd_gl_.semode)
         {
             std::cout << " STATE : stateestimation off" << std::endl;
