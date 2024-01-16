@@ -260,6 +260,10 @@ public:
 
     Eigen::VectorQd nn_estimated_q_dot_pre_;
 
+
+    Eigen::Vector3d current_acceleration_ = Eigen::Vector3d(0.0, 0.0, 0.0);
+    Eigen::Vector3d previous_acceleration_ = Eigen::Vector3d(0.0, 0.0, 0.0);
+
     ////////////////////////////MLP//////////////////////////////
 };
 

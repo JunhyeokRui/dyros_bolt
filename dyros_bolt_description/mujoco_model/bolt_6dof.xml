@@ -28,6 +28,7 @@
             <inertial pos="0 0 0" quat="0 0.707107 0 0.707107" mass="0.614369" diaginertia="0.0247612 0.0193811 0.00578574" />
             <joint name="virtual" type="free" limited='false' frictionloss="0" damping="0" stiffness="0" armature="0"/>
             <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="bolt_body" />
+            <site name="base_link_IMU" type="cylinder" size="0.005 0.005" group="4" rgba=".1 .1 .9 1"/>
             <body name="FL_SHOULDER" pos="0 0.0636 0">
                 <inertial pos="0.0170826 -0.00446892 -0.0109583" quat="0.380445 0.573263 0.68117 0.250275" mass="0.140043" diaginertia="0.000140999 0.000103321 5.85997e-05" />
                 <joint name="FL_HAA" pos="0 0 0" axis="1 0 0" limited="true" range="-10 10" />
@@ -71,6 +72,17 @@
 		<motor name="FR_HFE" joint="FR_HFE" /> 
 		<motor name="FR_KFE" joint="FR_KFE" /> 
     </actuator>  
+
+    <sensor> 
+        <accelerometer name="Acc_base_link_IMU" site="base_link_IMU"/>
+        <gyro name="Gyro_base_link_IMU" site="base_link_IMU"/>
+        <magnetometer name="Magnet_base_link_IMU" site="base_link_IMU"/>
+        <framequat name="base_link_quat" objtype="site" objname="base_link_IMU"/>
+        <framelinvel name="base_link_linear_vel" objtype="site" objname="base_link_IMU"/>
+        <frameangvel name="base_link_angular_vel" objtype="site" objname="base_link_IMU"/>
+    
+    </sensor>
+    
 
     <keyframe>
         <key name="front" time="0" qpos="0 0 0.5 1 0 0 0

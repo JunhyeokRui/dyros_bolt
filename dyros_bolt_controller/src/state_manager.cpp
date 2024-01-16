@@ -1219,6 +1219,16 @@ void StateManager::GetSensorData()
     rd_.imu_lin_acc(0) = dc_.tc_shm_->imu_acc[0];
     rd_.imu_lin_acc(1) = dc_.tc_shm_->imu_acc[1];
     rd_.imu_lin_acc(2) = dc_.tc_shm_->imu_acc[2];
+    rd_.imu_ang_acc(0) = dc_.tc_shm_->imu_gyro[0];
+    rd_.imu_ang_acc(1) = dc_.tc_shm_->imu_gyro[1];
+    rd_.imu_ang_acc(2) = dc_.tc_shm_->imu_gyro[2];
+    
+    double dt_ = 0.0005;    
+    rd_.imu_lin_vel +=  0.5 * (current_acceleration_ + previous_acceleration_) * dt_;
+    previous_acceleration_ = current_acceleration_;
+    current_acceleration_ = rd_.imu_lin_acc;
+    
+
 
     for (int i = 0; i < 6; i++)
     {
@@ -2673,3 +2683,4 @@ void StateManager::calculateJointVelMlpOutput()
         atb_mlp_output_update_ = false;
     }
 }
+

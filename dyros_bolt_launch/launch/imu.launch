@@ -1,0 +1,4 @@
+<launch>
+    <arg name="node_start_delay" default="0.2" />  
+</launch>
+<node name="dyros_bolt_sensor" pkg="dyros_bolt_sensor" type="dyros_bolt_sensor" output="screen" respawn="false" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "></node>

@@ -1,12 +1,12 @@
 <launch>
     
-    <node name="dyros_gui" pkg="dyros_gui" type="dyros_gui" />
+    <arg name="node_start_delay" default="0.2" />  
+    <!-- <node name="dyros_gui" pkg="dyros_gui" type="dyros_gui" />
     
     
     
     <arg name="lower" default="true"/>
-    <arg name="init" default="false"/>
-    <arg name="node_start_delay" default="0.2" />  
+    <arg name="init" default="false"/> -->
     
     
     <param name="dyros_bolt_controller/urdf_path" type="string" value="$(find dyros_bolt_description)/mujoco_model/bolt_6dof.urdf"/>

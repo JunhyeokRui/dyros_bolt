@@ -69,6 +69,8 @@ struct RobotData
     Eigen::VectorVQd q_ddot_virtual_;
 
     Eigen::Vector3d imu_lin_acc;
+    Eigen::Vector3d imu_ang_acc;
+    Eigen::Vector3d imu_lin_vel;
     Eigen::Vector3d imu_ang_vel;
     Eigen::Vector3d imu_ang_vel_before;
 
