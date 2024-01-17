@@ -11,7 +11,7 @@
         "/opt/ros/melodic/include/**",
         "/home/yong/ros_workspace/dyros_jet/src/DynamixelSDK/ros/dynamixel_sdk/include/**",
         "/home/yong/ros_workspace/bolt_ws/src/dyros_bolt/dyros_bolt_controller/include/**",
-        "/home/yong/ros_workspace/bolt_ws/src/dyros_gui/include/**",
+        "/home/yong/ros_workspace/bolt_ws/src/dyros_bolt_gui/include/**",
         "/home/yong/ros_workspace/dyros_jet/src/dyros_jet/dyros_jet_controller/include/**",
         "/home/yong/ros_workspace/dyros_jet/src/dyros_jet/dyros_jet_dynamixel_x_interface/include/**",
         "/home/yong/ros_workspace/dyros_jet/src/dyros_jet/dyros_jet_gui/include/**",

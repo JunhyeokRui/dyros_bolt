@@ -140,13 +140,10 @@ void *DyrosBoltController::Thread1()
 
     signalThread1 = true;
     int thread1_count = 0;
-    std::cout << "thread1 test1" << std::endl;
     while (!dc_.tc_shm_->shutdown) //ANCHOR - while not shutdown
     { 
-        std::cout << "thread1 test2" << std::endl;
         if (dc_.triggerThread1)
         {
-            std::cout << "thread1 test3" << std::endl;
             dc_.triggerThread1 = false;
 
             thread1_count++;
@@ -159,7 +156,6 @@ void *DyrosBoltController::Thread1()
             auto t1 = std::chrono::steady_clock::now();
 
             queue_controller_.callAvailable(ros::WallDuration());
-            std::cout << "thread1 test4" << std::endl;
             //rui - Start Dyros Bolt Control
             //////////////////////////////////////////////////////////
             ////////////////////Start Dyros Bolt Controll/////////////////
@@ -169,7 +165,6 @@ void *DyrosBoltController::Thread1()
             torque_task_.setZero();
             torque_grav_.setZero();
             torque_contact_.setZero();
-
             static VectorQd zero_m = VectorQd::Zero();
 
             if (rd_.positionControlSwitch) // if position control switch
@@ -223,8 +218,18 @@ void *DyrosBoltController::Thread1()
                 {
                         my_cc.computeSlow();
                 }
+                std::cout << "thread1 test6-3" << std::endl;
 #endif
             }
+            else
+            {
+                WBC::SetContact(rd_, 1, 1);
+                rd_.torque_desired = WBC::ContactForceRedistributionTorque(rd_, WBC::GravityCompensationTorque(rd_));
+                std::cout << "rd_.torque_desired8" << std::endl;
+                std::cout << rd_.torque_desired << std::endl;
+            }
+
+            std::cout << "thread1 test7" << std::endl;
 
             static std::chrono::steady_clock::time_point t_c_ = std::chrono::steady_clock::now();
 

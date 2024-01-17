@@ -86,9 +86,9 @@
   <exec_depend>dyros_bolt_lib</exec_depend>
   <exec_depend>dyros_bolt_description</exec_depend>
 
-  <!-- <build_depend>dyros_bolt_cc</build_depend>
+  <build_depend>dyros_bolt_cc</build_depend>
   <build_export_depend>dyros_bolt_cc</build_export_depend>
-  <exec_depend>dyros_bolt_cc</exec_depend> -->
+  <exec_depend>dyros_bolt_cc</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

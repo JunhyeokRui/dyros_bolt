@@ -8,5 +8,5 @@
     <arg name="run_mode" value="simulation" />
     <arg name="ctrl_mode" value="torque" />
   </include>
-  <!-- <node name="dyros_gui" pkg="dyros_gui" type="dyros_gui" /> -->
+  <!-- <node name="dyros_bolt_gui" pkg="dyros_bolt_gui" type="dyros_bolt_gui" /> -->
 </launch>

@@ -1,7 +1,7 @@
 <launch>
     
     <arg name="node_start_delay" default="0.2" />  
-    <!-- <node name="dyros_gui" pkg="dyros_gui" type="dyros_gui" />
+    <!-- <node name="dyros_bolt_gui" pkg="dyros_bolt_gui" type="dyros_bolt_gui" />
     
     
     
