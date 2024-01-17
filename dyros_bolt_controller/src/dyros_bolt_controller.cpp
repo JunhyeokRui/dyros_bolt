@@ -218,18 +218,15 @@ void *DyrosBoltController::Thread1()
                 {
                         my_cc.computeSlow();
                 }
-                std::cout << "thread1 test6-3" << std::endl;
 #endif
             }
             else
             {
-                WBC::SetContact(rd_, 1, 1);
-                rd_.torque_desired = WBC::ContactForceRedistributionTorque(rd_, WBC::GravityCompensationTorque(rd_));
-                std::cout << "rd_.torque_desired8" << std::endl;
-                std::cout << rd_.torque_desired << std::endl;
+                // WBC::SetContact(rd_, 1, 1);
+                // rd_.torque_desired = WBC::ContactForceRedistributionTorque(rd_, WBC::GravityCompensationTorque(rd_));
+                // std::cout << "rd_.torque_desired8" << std::endl;
+                // std::cout << rd_.torque_desired << std::endl;
             }
-
-            std::cout << "thread1 test7" << std::endl;
 
             static std::chrono::steady_clock::time_point t_c_ = std::chrono::steady_clock::now();
 
