@@ -56,6 +56,10 @@ typedef struct SHMmsgs
     volatile int16_t elmo_torque[MODEL_DOF];
 
     float sim_time_;
+    
+    int contact_sim_LF = 0;
+    int contact_sim_RF = 0;
+    double base_pos_sim[3];
 
     float pos_virtual[7]; //virtual pos(3) + virtual quat(4)
     float vel_virtual[6]; //virtual vel(3) + virtual twist(3)

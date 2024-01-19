@@ -73,7 +73,7 @@ using namespace std;
 DyrosBoltController::DyrosBoltController(StateManager &stm_global) :  dc_(stm_global.dc_), stm_(stm_global), rd_(stm_global.dc_.rd_)
 #ifdef COMPILE_DYROS_BOLT_CC
                                                                ,
-                                                               my_cc(*(new CustomController(rd_)))
+                                                               my_cc(*(new CustomController(rd_, stm_, dc_)))
 #endif
 {   
     nh_controller_.setCallbackQueue(&queue_controller_);

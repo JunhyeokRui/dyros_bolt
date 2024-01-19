@@ -1,7 +1,8 @@
 #ifndef DYROS_BOLT_CONTROLLER_H
 #define DYROS_BOLT_CONTROLLER_H
 
-#include "dyros_bolt_controller/state_manager.h"
+// #include "dyros_bolt_controller/state_manager.h"
+#include "dyros_bolt_lib/state_manager.h"
 #include "wholebody_functions.h"
 #include "dyros_bolt_msgs/TaskGainCommand.h"
 

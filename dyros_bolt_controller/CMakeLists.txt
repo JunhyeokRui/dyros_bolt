@@ -155,7 +155,7 @@ add_custom_target(dyros_bolt_control_headers SOURCES ${HeaderFiles})
 
 file(GLOB CONTROLLER_SRC
     "src/odrive_socketcan.cpp"
-    "src/state_manager.cpp"
+    # "src/state_manager.cpp"
     "src/dyros_bolt_controller.cpp"
     )
 

@@ -10,6 +10,8 @@ add_compile_options(-O)
 find_package(catkin REQUIRED COMPONENTS
   eigen_conversions
   roscpp
+  tf2
+  tf2_ros
   dyros_bolt_msgs
   mujoco_ros_msgs
 )
@@ -127,6 +129,7 @@ add_library(${PROJECT_NAME}
   src/link.cpp
   src/qp.cpp
   src/wholebody_functions.cpp
+  src/state_manager.cpp
 )
 
 ## Add cmake target dependencies of the library

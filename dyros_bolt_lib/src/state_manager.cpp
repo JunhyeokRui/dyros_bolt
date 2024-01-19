@@ -1,6 +1,8 @@
-#include "dyros_bolt_controller/state_manager.h"
+// #include "dyros_bolt_controller/state_manager.h"
+#include "dyros_bolt_lib/state_manager.h"
 #include "fstream"
 #include "algorithm"
+#include <cstring>
 #include <iomanip>
 #include <sys/shm.h>
 #include <unistd.h>
@@ -96,7 +98,6 @@ void *StateManager::StateThread()
     cout << " STATE : started with pid : " << getpid() << std::endl;
 
     int rcv_tcnt = -1;
-
     // Checking Connect//
 
     // Check Coonnect Complete//
@@ -115,6 +116,7 @@ void *StateManager::StateThread()
     tv_us1.tv_nsec = 10000;
 
     initializeJointMLP();
+    initializeCustomMatrix();
     loadJointVelNetwork("/home/dyros/joint_vel_net/");
 
     while (true)
@@ -159,7 +161,9 @@ void *StateManager::StateThread()
         rcv_tcnt = dc_.tc_shm_->statusCount;
 
         GetJointData(); // 0.246 us //w/o march native 0.226
-
+        
+        GetCustomSimData(); 
+        
         InitYaw();
 
         auto d1 = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - t1).count();
@@ -1134,7 +1138,15 @@ void StateManager::InitYaw()
 
     // q_virtual_local_ = q_virtual_local_yaw_initialized;
 }
-
+void StateManager::GetCustomSimData(){
+    //rui - foot contact states
+    
+    foot_contact_(0) = dc_.tc_shm_->contact_sim_LF;
+    foot_contact_(1) = dc_.tc_shm_->contact_sim_RF;
+    base_pos_(0) = dc_.tc_shm_->base_pos_sim[0];
+    base_pos_(1) = dc_.tc_shm_->base_pos_sim[1];
+    base_pos_(2) = dc_.tc_shm_->base_pos_sim[2];
+}
 void StateManager::GetJointData()
 {
     while (dc_.tc_shm_->statusWriting.load(std::memory_order_acquire))
@@ -1226,14 +1238,25 @@ void StateManager::GetJointData()
     // dc_.tc_shm_->pos
 }
 
-void StateManager::GetSensorData()
+void StateManager::initializeCustomMatrix()
 {
+    previous_acceleration_lin.setZero();
+    previous_acceleration_ang.setZero();
+    current_acceleration_lin.setZero();
+    current_acceleration_ang.setZero();
+
+}
+
+void StateManager::GetSensorData()
+{   
+    
     rd_.imu_lin_acc(0) = dc_.tc_shm_->imu_acc[0];
     rd_.imu_lin_acc(1) = dc_.tc_shm_->imu_acc[1];
     rd_.imu_lin_acc(2) = dc_.tc_shm_->imu_acc[2];
     rd_.imu_ang_acc(0) = dc_.tc_shm_->imu_gyro[0];
     rd_.imu_ang_acc(1) = dc_.tc_shm_->imu_gyro[1];
     rd_.imu_ang_acc(2) = dc_.tc_shm_->imu_gyro[2];
+
 
     rd_.base_link_xquat_rd.x() = dc_.tc_shm_->base_link_xquat[0];
     rd_.base_link_xquat_rd.y() = dc_.tc_shm_->base_link_xquat[1];
@@ -1247,7 +1270,15 @@ void StateManager::GetSensorData()
     previous_acceleration_ang = current_acceleration_ang;
     current_acceleration_lin = rd_.imu_lin_acc;
     current_acceleration_ang = rd_.imu_ang_acc;
-    
+
+    std::cout << "rd_.imu_lin_vel" << std::endl;
+    std::cout << rd_.imu_lin_vel << std::endl;
+    std::cout << "rd_.imu_lin_vel" << std::endl;
+    std::cout << rd_.imu_ang_vel << std::endl;
+    std::cout << "rd_.imu_lin_acc" << std::endl;
+    std::cout << rd_.imu_lin_acc << std::endl;
+    std::cout << "rd_.imu_ang_acc" << std::endl;
+    std::cout << rd_.imu_ang_acc << std::endl;
 
 
     for (int i = 0; i < 6; i++)

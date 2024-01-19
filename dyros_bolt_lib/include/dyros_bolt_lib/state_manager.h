@@ -86,6 +86,7 @@ public:
     float q_ext_a[MODEL_DOF] = {};
     int joint_state_[MODEL_DOF];
     int joint_state_before_[MODEL_DOF];
+    
 
     int8_t state_elmo_[MODEL_DOF];
     int8_t state_safety_[MODEL_DOF];
@@ -132,6 +133,9 @@ public:
     Eigen::Vector3d pelvis_velocity_estimate_;
     Eigen::Vector3d pelvis_position_estimate_;
 
+    Eigen::Vector2d foot_contact_;
+    Eigen::Vector3d base_pos_;
+
 
     float control_time_ = 0;
 
@@ -149,8 +153,8 @@ public:
     float lmax = 0.0, lmin = 10000.00, ldev = 0.0, lavg = 0.0, lat = 0.0;
     float smax = 0.0, smin = 10000.00, sdev = 0.0, savg = 0.0, sat = 0.0;
 
+    void GetCustomSimData();
     // Simmode values..
-
     void ConnectSim();
     void GetSimData();
     void SendCommand(VectorQf command, std::vector<bool> command_mode);
@@ -263,10 +267,12 @@ public:
     Eigen::VectorQd nn_estimated_q_dot_pre_;
 
 
-    Eigen::Vector3d current_acceleration_lin = Eigen::Vector3d(0.0, 0.0, 0.0);
-    Eigen::Vector3d previous_acceleration_lin = Eigen::Vector3d(0.0, 0.0, 0.0);
-    Eigen::Vector3d current_acceleration_ang = Eigen::Vector3d(0.0, 0.0, 0.0);
-    Eigen::Vector3d previous_acceleration_ang = Eigen::Vector3d(0.0, 0.0, 0.0);
+    Eigen::Vector3d current_acceleration_lin;
+    Eigen::Vector3d previous_acceleration_lin;
+    Eigen::Vector3d current_acceleration_ang;
+    Eigen::Vector3d previous_acceleration_ang;
+
+    void initializeCustomMatrix();
 
     ////////////////////////////MLP//////////////////////////////
 };
