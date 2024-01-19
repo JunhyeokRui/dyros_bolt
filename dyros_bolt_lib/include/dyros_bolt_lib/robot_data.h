@@ -96,7 +96,8 @@ struct RobotData
 
     ///////////////////////////////////////////////
     ///////////REFRESHING VARIABLES END////////////
-
+    int tester = 0;
+    
     Eigen::VectorQd q_desired;
     Eigen::VectorQd q_dot_desired;
     Eigen::VectorQd torque_desired;

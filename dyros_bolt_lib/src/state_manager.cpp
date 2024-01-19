@@ -1271,14 +1271,6 @@ void StateManager::GetSensorData()
     current_acceleration_lin = rd_.imu_lin_acc;
     current_acceleration_ang = rd_.imu_ang_acc;
 
-    std::cout << "rd_.imu_lin_vel" << std::endl;
-    std::cout << rd_.imu_lin_vel << std::endl;
-    std::cout << "rd_.imu_lin_vel" << std::endl;
-    std::cout << rd_.imu_ang_vel << std::endl;
-    std::cout << "rd_.imu_lin_acc" << std::endl;
-    std::cout << rd_.imu_lin_acc << std::endl;
-    std::cout << "rd_.imu_ang_acc" << std::endl;
-    std::cout << rd_.imu_ang_acc << std::endl;
 
 
     for (int i = 0; i < 6; i++)
@@ -1406,6 +1398,9 @@ void StateManager::MeasureTime(int currentCount, int nanoseconds1, int nanosecon
 
 void StateManager::StoreState(RobotData &rd_dst)
 {
+    memcpy(&rd_dst.imu_lin_vel, &rd_.imu_lin_vel, sizeof(Vector3d));
+    memcpy(&rd_dst.imu_ang_vel, &rd_.imu_ang_vel, sizeof(Vector3d));
+    memcpy(&rd_dst.base_link_xquat_rd, &rd_.base_link_xquat_rd, sizeof(Quaterniond));
 
     memcpy(&rd_dst.model_, &model_global_, sizeof(RigidBodyDynamics::Model));
 
@@ -2363,7 +2358,6 @@ void StateManager::GuiCommandCallback(const std_msgs::StringConstPtr &msg)
     }
     else if (msg->data == "stateestimation")
     {   
-        std::cout << "stateestimation button pressed and entered state_manager.cpp" << std::endl;
         if (rd_gl_.semode)
         {
             std::cout << " STATE : stateestimation off" << std::endl;

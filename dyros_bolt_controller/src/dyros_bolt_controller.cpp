@@ -224,11 +224,12 @@ void *DyrosBoltController::Thread1()
             {
                 // WBC::SetContact(rd_, 1, 1);
                 // rd_.torque_desired = WBC::ContactForceRedistributionTorque(rd_, WBC::GravityCompensationTorque(rd_));
-                // std::cout << "rd_.torque_desired8" << std::endl;
-                // std::cout << rd_.torque_desired << std::endl;
             }
+            std::cout << "rd_.torque_desired" << std::endl;
+            std::cout << rd_.torque_desired << std::endl;
 
             static std::chrono::steady_clock::time_point t_c_ = std::chrono::steady_clock::now();
+
 
             SendCommand(rd_.torque_desired);
 
