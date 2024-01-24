@@ -19,6 +19,7 @@ add_message_files(
   TaskCommand.msg
   TaskGainCommand.msg
   TaskCommandQue.msg
+  torqueCommand.msg
   positionCommand.msg
   WalkingCommand.msg
   JumpingCommand.msg

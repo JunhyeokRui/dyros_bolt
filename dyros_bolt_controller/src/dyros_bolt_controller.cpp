@@ -229,7 +229,6 @@ void *DyrosBoltController::Thread1()
 
             static std::chrono::steady_clock::time_point t_c_ = std::chrono::steady_clock::now();
 
-
             SendCommand(rd_.torque_desired);
 
             auto t_end = std::chrono::steady_clock::now();
@@ -435,6 +434,22 @@ void DyrosBoltController::SendCommand(Eigen::VectorQd torque_command)
     dc_.t_c_ = true;
     dc_.control_command_count++;
     std::copy(torque_command.data(), torque_command.data() + MODEL_DOF, dc_.torque_command);
+
+//rui - for debug start
+        // std::cout << "torque_command" << std::endl;
+        // for (int i = 0; i < 20; ++i) {
+        //     const auto& element = torque_command[i];
+        //     std::cout << element << " ";
+        // }
+        // std::cout << std::endl;
+
+        // std::cout << "dc_.torque_command" << std::endl;
+        // for (const auto& element : dc_.torque_command) {
+        //     std::cout << element << " ";
+        // }
+        // std::cout << std::endl;
+//rui - for debug end
+    
     dc_.t_c_ = false;
 }
 
@@ -494,9 +509,7 @@ void DyrosBoltController::TaskCommandCallback(const dyros_bolt_msgs::TaskCommand
     rd_.pc_mode = false;
     rd_.tc_ = *msg;
     std::cout << " CNTRL : task signal received mode :" << rd_.tc_.mode << std::endl;
-    std::cout << "test1" << std::endl;
     stm_.StatusPub("%f task Control mode : %d", (float)rd_.control_time_, rd_.tc_.mode);
-    std::cout << "test2" << std::endl;
     rd_.tc_time_ = rd_.control_time_;
     rd_.tc_run = true;
     rd_.tc_init = true;
@@ -505,7 +518,6 @@ void DyrosBoltController::TaskCommandCallback(const dyros_bolt_msgs::TaskCommand
     rd_.link_[base_link].SetInitialWithPosition();
     rd_.link_[COM_id].SetInitialWithPosition();
 
-    std::cout << "test3" << std::endl;
     if (!rd_.semode)
     {
         std::cout << " CNTRL : State Estimate is not running. disable task command" << std::endl;

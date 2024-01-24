@@ -115,9 +115,9 @@ void *StateManager::StateThread()
     tv_us1.tv_sec = 0;
     tv_us1.tv_nsec = 10000;
 
-    initializeJointMLP();
+    // initializeJointMLP();
     initializeCustomMatrix();
-    loadJointVelNetwork("/home/dyros/joint_vel_net/");
+    // loadJointVelNetwork("/home/dyros/joint_vel_net/");
 
     while (true)
     {
@@ -829,6 +829,21 @@ void StateManager::SendCommand()
     }
     dc_.t_c_ = true;
     std::copy(dc_.torque_command, dc_.torque_command + MODEL_DOF, torque_command);
+
+    //rui - for debug start
+        // std::cout << "dc_.torque_command stm" << std::endl;
+        // for (int i = 0; i < 6; ++i) {
+        //     const auto& element = dc_.torque_command[i];
+        //     std::cout << element << " ";
+        // }
+        // std::cout << std::endl;
+
+        // std::cout << "torque_command stm" << std::endl;
+        // for (const auto& element : torque_command) {
+        //     std::cout << element << " ";
+        // }
+        // std::cout << std::endl;
+//rui - for debug end
     static int rcv_c_count = dc_.control_command_count;
 
     dc_.t_c_ = false;
@@ -1039,20 +1054,20 @@ void StateManager::SendCommand()
 
     dc_.tc_shm_->commanding = true;
 
-    // UpperBody
-    while (dc_.tc_shm_->cmd_upper)
-    {
-        clock_nanosleep(CLOCK_MONOTONIC, 0, &t_u10, NULL);
-    }
-    dc_.tc_shm_->cmd_upper = true;
-    // std::fill(dc_.tc_shm_->commandMode, dc_.tc_shm_->commandMode + MODEL_DOF, 1);
-    std::copy(torque_command + 15, torque_command + MODEL_DOF, dc_.tc_shm_->torqueCommand + 15);
-    dc_.tc_shm_->maxTorque = maxTorqueCommand;
-    // static int cCount = 0;
-    cCount++;
-    dc_.tc_shm_->commandCount.store(cCount);
+    // // UpperBody
+    // while (dc_.tc_shm_->cmd_upper)
+    // {
+    //     clock_nanosleep(CLOCK_MONOTONIC, 0, &t_u10, NULL);
+    // }
+    // dc_.tc_shm_->cmd_upper = true;
+    // // std::fill(dc_.tc_shm_->commandMode, dc_.tc_shm_->commandMode + MODEL_DOF, 1);
+    // std::copy(torque_command + 15, torque_command + MODEL_DOF, dc_.tc_shm_->torqueCommand + 15);
+    // dc_.tc_shm_->maxTorque = maxTorqueCommand;
+    // // static int cCount = 0;
+    // cCount++;
+    // dc_.tc_shm_->commandCount.store(cCount);
 
-    dc_.tc_shm_->cmd_upper = false;
+    // dc_.tc_shm_->cmd_upper = false;
     // LowerBody
 
     while (dc_.tc_shm_->cmd_lower)
@@ -1061,7 +1076,8 @@ void StateManager::SendCommand()
     }
 
     dc_.tc_shm_->cmd_lower = true;
-    std::copy(torque_command, torque_command + 15, dc_.tc_shm_->torqueCommand);
+    std::copy(torque_command, torque_command + 6, dc_.tc_shm_->torqueCommand);
+    
     dc_.tc_shm_->cmd_lower = false;
 
     dc_.tc_shm_->commanding.store(false);
@@ -1160,6 +1176,19 @@ void StateManager::GetJointData()
     memcpy(q_dot_a_, dc_.tc_shm_->vel, sizeof(float) * MODEL_DOF);
     memcpy(torqueActual_a_, dc_.tc_shm_->torqueActual, sizeof(float) * MODEL_DOF);
     memcpy(q_ext_a, dc_.tc_shm_->posExt, sizeof(float) * MODEL_DOF);
+//rui - for debug start
+    // std::cout << "q_a_" << std::endl;
+    // for (const auto& element : q_a_) {
+    //     std::cout << element << " ";
+    // }
+    // std::cout << std::endl;
+
+    // std::cout << "dc_.tc_shm_->pos" << std::endl;
+    // for (const auto& element : dc_.tc_shm_->pos) {
+    //     std::cout << element << " ";
+    // }
+    // std::cout << std::endl;
+//rui - for debug end
 
     q_ = Map<VectorQf>(q_a_, MODEL_DOF).cast<double>();
 
@@ -1180,6 +1209,15 @@ void StateManager::GetJointData()
     q_virtual_local_.segment(6, MODEL_DOF) = q_;
     q_dot_virtual_local_.segment(6, MODEL_DOF) = q_dot_;
 
+    //rui - for debug start
+    // std::cout << "q_virtual_local_" << std::endl;
+    // std::cout << q_virtual_local_ << std::endl;
+    // std::cout << std::endl;
+
+    // std::cout << "q_dot_virtual_local_" << std::endl;
+    // std::cout << q_dot_virtual_local_ << std::endl;
+    // std::cout << std::endl;
+    //rui - for debug end
 
     if (dc_.useSimVirtual)
     {
