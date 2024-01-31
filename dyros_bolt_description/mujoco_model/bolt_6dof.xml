@@ -1,6 +1,7 @@
 <mujoco model="dyros_bolt_description">
     <include file="simulation_scene.xml"/>
 
+
     <asset>
         <mesh name="bolt_body" file="bolt_body.stl" />
         <mesh name="bolt_hip_fe_left_side" file="bolt_hip_fe_left_side.stl" />
@@ -25,25 +26,25 @@
         <light directional="true" diffuse=".5 .5 .5" pos="10 0 0" dir="-10 0 0"/>
 
         <body name="base_link" pos="0 0 0">
-            <inertial pos="0 0 0" quat="0 0.707107 0 0.707107" mass="0.614369" diaginertia="0.0247612 0.0193811 0.00578574" />
+            <inertial pos="0 0 0" quat="0 0.707107 0 0.707107" mass="0.61436936" diaginertia="0.0247612 0.0193811 0.00578574" />
             <joint name="virtual" type="free" limited='false' frictionloss="0" damping="0" stiffness="0" armature="0"/>
             <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="bolt_body" />
             <site name="base_link_IMU" type="cylinder" size="0.005 0.005" group="4" rgba=".1 .1 .9 1"/>
             <body name="FL_SHOULDER" pos="0 0.0636 0">
                 <inertial pos="0.0170826 -0.00446892 -0.0109583" quat="0.380445 0.573263 0.68117 0.250275" mass="0.140043" diaginertia="0.000140999 0.000103321 5.85997e-05" />
-                <joint name="FL_HAA" pos="0 0 0" axis="1 0 0" limited="true" range="-10 10" />
+                <joint name="FL_HAA" pos="0 0 0" axis="1 0 0" limited="true" range="-0.36 1.0472" />
                 <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="bolt_hip_fe_left_side" />
                 <body name="FL_UPPER_LEG" pos="0 0.0145 -0.0386">
                     <inertial pos="1.377e-05 0.0193585 -0.118707" quat="0.705243 -0.0424536 0.0423607 0.706424" mass="0.148538" diaginertia="0.000417563 0.00041107 2.46069e-05" />
-                    <joint name="FL_HFE" pos="0 0 0" axis="0 1 0" limited="true" range="-10 10" />
+                    <joint name="FL_HFE" pos="0 0 0" axis="0 1 0" limited="true" range="-1.57 1.57" />
                     <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="upper_leg_200mm_left_side" />
                     <body name="FL_LOWER_LEG" pos="0 0.0374 -0.2">
                         <inertial pos="0 0.00836601 -0.116186" quat="0.707082 -0.00588079 0.00588079 0.707082" mass="0.0312724" diaginertia="0.00011713 0.000116139 2.69836e-06" />
-                        <joint name="FL_KFE" pos="0 0 0" axis="0 1 0" limited="true" range="-10 10" />
+                        <joint name="FL_KFE" pos="0 0 0" axis="0 1 0" limited="true" range="-3.14 0" />
                         <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="lower_leg_200mm_left_side" />
                         <!-- <geom pos="0 0.008 -0.21" quat="0.385543 0 0.92269 0" type="mesh" rgba="0.8 0.8 0.8 1" mesh="bolt_foot" /> -->
                         <body name="FL_FOOT" pos="0 0.008 -0.2">
-                            <inertial pos="0 0 0.00035767" quat="0.707107 0 0 0.707107" mass="0.001" diaginertia="8.4e-07 5.7e-07 5.3e-07" />
+                            <inertial pos="0 0 0.00035767" quat="0.707107 0 0 0.707107" mass="0.00010" diaginertia="8.4e-07 5.7e-07 5.3e-07" />
                             <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="bolt_foot" />
                         </body>
                     </body>
@@ -51,25 +52,28 @@
             </body>
             <body name="FR_SHOULDER" pos="0 -0.0636 0">
                 <inertial pos="0.0170823 0.00447099 -0.0109585" quat="0.250376 0.681095 0.573344 0.380393" mass="0.140044" diaginertia="0.000141003 0.000103316 5.8591e-05" />
-                <joint name="FR_HAA" pos="0 0 0" axis="1 0 0" limited="true" range="-10 10" />
+                <joint name="FR_HAA" pos="0 0 0" axis="1 0 0" limited="true" range="-1.0472 0.36" />
                 <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="bolt_hip_fe_right_side" />
                 <body name="FR_UPPER_LEG" pos="0 -0.0145 -0.0386">
                     <inertial pos="-1.377e-05 -0.0193585 -0.118707" quat="0.705243 0.0424536 -0.0423607 0.706424" mass="0.148538" diaginertia="0.000417563 0.00041107 2.46069e-05" />
-                    <joint name="FR_HFE" pos="0 0 0" axis="0 1 0" limited="true" range="-10 10" />
+                    <joint name="FR_HFE" pos="0 0 0" axis="0 1 0" limited="true" range="-1.57 1.57" />
                     <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="upper_leg_200mm_right_side" />
                     <body name="FR_LOWER_LEG" pos="0 -0.0374 -0.2">
                         <inertial pos="0 -0.00836601 -0.116186" quat="0.707082 0.00588079 -0.00588079 0.707082" mass="0.0312724" diaginertia="0.00011713 0.000116139 2.69836e-06" />
-                        <joint name="FR_KFE" pos="0 0 0" axis="0 1 0" limited="true" range="-10 10" />
+                        <joint name="FR_KFE" pos="0 0 0" axis="0 1 0" limited="true" range="-3.14 0" />
                         <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="lower_leg_200mm_right_side" />
                         <!-- <geom pos="0 -0.008 -0.21" quat="0.385543 0 0.92269 0" type="mesh" rgba="0.8 0.8 0.8 1" mesh="bolt_foot" /> -->
                         <body name="FR_FOOT" pos="0 -0.008 -0.2">
-                            <inertial pos="0 0 0.00035767" quat="0.707107 0 0 0.707107" mass="0.001" diaginertia="8.4e-07 5.7e-07 5.3e-07" />
+                            <inertial pos="0 0 0.00035767" quat="0.707107 0 0 0.707107" mass="0.00010" diaginertia="8.4e-07 5.7e-07 5.3e-07" />
                             <geom type="mesh" rgba="0.8 0.8 0.8 1" mesh="bolt_foot" />
                         </body>
                     </body>
                 </body>
             </body>
         </body>
+
+
+
     </worldbody>
 
     <actuator>
@@ -93,8 +97,10 @@
     
 
     <keyframe>
-        <key name="front" time="0" qpos="0 0 0.5 1 0 0 0
-                                        
-                                         0 0.5 -1 0 0.5 -1"/>
+        <key name="front" time="0" qpos="0 0 0.45 1 0 0 0
+                                            0. 0.2 -0.4 0 0.2 -0.4"/>
+        
+                                         <!-- 0 0.5 -1 0 0.5 -1" -->
+                                         
     </keyframe>
 </mujoco>

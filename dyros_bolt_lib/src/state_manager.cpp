@@ -1162,6 +1162,9 @@ void StateManager::GetCustomSimData(){
     base_pos_(0) = dc_.tc_shm_->base_pos_sim[0];
     base_pos_(1) = dc_.tc_shm_->base_pos_sim[1];
     base_pos_(2) = dc_.tc_shm_->base_pos_sim[2];
+    
+
+
 }
 void StateManager::GetJointData()
 {
@@ -1176,6 +1179,7 @@ void StateManager::GetJointData()
     memcpy(q_dot_a_, dc_.tc_shm_->vel, sizeof(float) * MODEL_DOF);
     memcpy(torqueActual_a_, dc_.tc_shm_->torqueActual, sizeof(float) * MODEL_DOF);
     memcpy(q_ext_a, dc_.tc_shm_->posExt, sizeof(float) * MODEL_DOF);
+    memcpy(q_dot_virtual_a_, dc_.tc_shm_->vel_virtual_cc, sizeof(float) * 6);
 //rui - for debug start
     // std::cout << "q_a_" << std::endl;
     // for (const auto& element : q_a_) {
@@ -1183,14 +1187,20 @@ void StateManager::GetJointData()
     // }
     // std::cout << std::endl;
 
-    // std::cout << "dc_.tc_shm_->pos" << std::endl;
-    // for (const auto& element : dc_.tc_shm_->pos) {
+    // std::cout << std::endl;
+    // std::cout << "q_dot_a_" << std::endl;
+    // for (const auto& element : q_dot_a_) {
     //     std::cout << element << " ";
     // }
     // std::cout << std::endl;
-//rui - for debug end
 
+//rui - for debug end
+    
     q_ = Map<VectorQf>(q_a_, MODEL_DOF).cast<double>();
+
+    q_pos_cc_ = Map<VectorQf>(q_a_, MODEL_DOF).cast<double>();
+    q_vel_cc_ = Map<VectorQf>(q_dot_a_, MODEL_DOF).cast<double>();
+    q_vel_virtual_cc_ = Map<VectorQf>(q_dot_virtual_a_, 6).cast<double>();
 
     if (qdot_estimation_switch)
     {
@@ -1288,12 +1298,12 @@ void StateManager::initializeCustomMatrix()
 void StateManager::GetSensorData()
 {   
     
-    rd_.imu_lin_acc(0) = dc_.tc_shm_->imu_acc[0];
-    rd_.imu_lin_acc(1) = dc_.tc_shm_->imu_acc[1];
-    rd_.imu_lin_acc(2) = dc_.tc_shm_->imu_acc[2];
-    rd_.imu_ang_acc(0) = dc_.tc_shm_->imu_gyro[0];
-    rd_.imu_ang_acc(1) = dc_.tc_shm_->imu_gyro[1];
-    rd_.imu_ang_acc(2) = dc_.tc_shm_->imu_gyro[2];
+    // rd_.imu_lin_acc(0) = dc_.tc_shm_->imu_acc[0];
+    // rd_.imu_lin_acc(1) = dc_.tc_shm_->imu_acc[1];
+    // rd_.imu_lin_acc(2) = dc_.tc_shm_->imu_acc[2];
+    // rd_.imu_ang_acc(0) = dc_.tc_shm_->imu_gyro[0];
+    // rd_.imu_ang_acc(1) = dc_.tc_shm_->imu_gyro[1];
+    // rd_.imu_ang_acc(2) = dc_.tc_shm_->imu_gyro[2];
 
 
     rd_.base_link_xquat_rd.x() = dc_.tc_shm_->base_link_xquat[0];
@@ -1301,13 +1311,13 @@ void StateManager::GetSensorData()
     rd_.base_link_xquat_rd.z() = dc_.tc_shm_->base_link_xquat[2];
     rd_.base_link_xquat_rd.w() = dc_.tc_shm_->base_link_xquat[3];
     
-    double dt_ = 0.0005;    
-    rd_.imu_lin_vel +=  0.5 * (current_acceleration_lin + previous_acceleration_lin) * dt_;
-    rd_.imu_ang_vel += 0.5 * (current_acceleration_ang + previous_acceleration_ang) * dt_;
-    previous_acceleration_lin = current_acceleration_lin;
-    previous_acceleration_ang = current_acceleration_ang;
-    current_acceleration_lin = rd_.imu_lin_acc;
-    current_acceleration_ang = rd_.imu_ang_acc;
+    // double dt_ = 0.0005;    
+    // rd_.imu_lin_vel +=  0.5 * (current_acceleration_lin + previous_acceleration_lin) * dt_;
+    // rd_.imu_ang_vel += 0.5 * (current_acceleration_ang + previous_acceleration_ang) * dt_;
+    // previous_acceleration_lin = current_acceleration_lin;
+    // previous_acceleration_ang = current_acceleration_ang;
+    // current_acceleration_lin = rd_.imu_lin_acc;
+    // current_acceleration_ang = rd_.imu_ang_acc;
 
 
 

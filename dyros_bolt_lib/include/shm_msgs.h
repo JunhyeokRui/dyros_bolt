@@ -52,6 +52,7 @@ typedef struct SHMmsgs
     float torqueActual[MODEL_DOF];
     float vel[MODEL_DOF];
     float pos[MODEL_DOF];
+    float vel_virtual_cc[6];
     float posExt[MODEL_DOF];
     volatile int16_t elmo_torque[MODEL_DOF];
 

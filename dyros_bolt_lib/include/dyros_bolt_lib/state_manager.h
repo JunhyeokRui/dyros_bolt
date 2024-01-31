@@ -84,8 +84,10 @@ public:
     float q_dot_a_[MODEL_DOF] = {};
     float torqueActual_a_[MODEL_DOF] = {};
     float q_ext_a[MODEL_DOF] = {};
+    float q_dot_virtual_a_[6] = {};
     int joint_state_[MODEL_DOF];
     int joint_state_before_[MODEL_DOF];
+
     
 
     int8_t state_elmo_[MODEL_DOF];
@@ -135,6 +137,10 @@ public:
 
     Eigen::Vector2d foot_contact_;
     Eigen::Vector3d base_pos_;
+
+    Eigen::VectorQd q_pos_cc_;
+    Eigen::VectorQd q_vel_cc_;
+    Eigen::VectorQd q_vel_virtual_cc_;
 
 
     float control_time_ = 0;
