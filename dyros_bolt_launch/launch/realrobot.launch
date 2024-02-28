@@ -1,13 +1,9 @@
 <launch>
-    
+    <arg name="gui" default="true" />
+    <arg name="log" default="false"/>
+    <arg name="init" default="false"/>
     <arg name="node_start_delay" default="0.2" />  
-    <!-- <node name="dyros_bolt_gui" pkg="dyros_bolt_gui" type="dyros_bolt_gui" />
-    
-    
-    
-    <arg name="lower" default="true"/>
-    <arg name="init" default="false"/> -->
-    
+    <arg name="node_start_delay_can" default="0.3" />  
     
     <param name="dyros_bolt_controller/urdf_path" type="string" value="$(find dyros_bolt_description)/mujoco_model/bolt_6dof.urdf"/>
     
@@ -22,7 +18,13 @@
     </node>
 
     <node name="dyros_bolt_sensor" pkg="dyros_bolt_sensor" type="dyros_bolt_sensor" output="screen" respawn="false" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
-
     </node>
+
+    <node name="dyros_bolt_real_robot" pkg="dyros_bolt_real_robot" type="dyros_bolt_real_robot" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_can); $0 $@' ">
+    </node>
+
+    <group if="$(arg gui)">
+        <node name="dyros_bolt_gui" pkg="dyros_bolt_gui" type="dyros_bolt_gui" />
+    </group>
 
 </launch>

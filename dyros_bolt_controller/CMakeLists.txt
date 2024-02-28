@@ -23,6 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
   dyros_bolt_lib
   dyros_bolt_description
   dyros_bolt_msgs
+  # dyros_bolt_real_robot
 )
 find_package(dyros_bolt_cc QUIET)
 # find_package(dwbc REQUIRED)
@@ -123,6 +124,7 @@ catkin_package(
   LIBRARIES dyros_bolt_controller
   CATKIN_DEPENDS actionlib realtime_tools eigen_conversions geometry_msgs roscpp roslib sensor_msgs std_msgs mujoco_ros_msgs dyros_bolt_lib dyros_bolt_description dyros_bolt_msgs 
   dyros_bolt_cc
+  # dyros_bolt_real_robot
 #  DEPENDS system_lib
 )
 
@@ -207,6 +209,7 @@ target_link_libraries(${PROJECT_NAME}_lib
 )
 target_link_libraries(${PROJECT_NAME}
   ${PROJECT_NAME}_lib
+  # ${PROJECT_NAME}_real_robot
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
 )

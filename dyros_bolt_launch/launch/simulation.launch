@@ -25,5 +25,4 @@
         <node name="dyros_bolt_gui" pkg="dyros_bolt_gui" type="dyros_bolt_gui" />
     </group>
     
-
 </launch>

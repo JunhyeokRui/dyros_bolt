@@ -1,8 +1,0 @@
-# can interface name as shown in ifconfig -a
-can_device: "can0"
-# axis state update in Hz
-update_rate: 200
-# array of strings representing names of axises
-axis_names: ["left_hip_AA", "left_hip_FE", "left_knee", "right_hip_AA", "right_hip_FE", "right_knee"]
-# array of ints representing can ids of axises
-axis_can_ids: [0, 1, 2, 3, 4, 5]

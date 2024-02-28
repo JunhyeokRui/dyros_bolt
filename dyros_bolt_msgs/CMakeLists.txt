@@ -25,6 +25,7 @@ add_message_files(
   JumpingCommand.msg
   WalkingState.msg
   VelocityCommand.msg
+  CustomCommand.msg
 )
 
 add_action_files(DIRECTORY action FILES 

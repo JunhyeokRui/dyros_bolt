@@ -525,7 +525,6 @@ void DyrosBoltController::TaskCommandCallback(const dyros_bolt_msgs::TaskCommand
     }
 }
 
-
 void DyrosBoltController::TaskGainCommandCallback(const dyros_bolt_msgs::TaskGainCommandConstPtr &msg)
 {
     int __id = 0;

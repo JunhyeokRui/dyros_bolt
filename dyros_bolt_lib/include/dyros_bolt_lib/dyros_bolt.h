@@ -10,6 +10,10 @@ namespace DYROS_BOLT {
     const std::string JOINT_NAME[MODEL_DOF] = {
         "FL_HAA", "FL_HFE", "FL_KFE", "FR_HAA", "FR_HFE", "FR_KFE"};
     
+    const int JOINT_ID[MODEL_DOF] = {
+        1,2,3,
+        4,5,6};
+
     const std::string ODRIVE_NAME[ODRIVE_CNT] = {
         "HAA", "HFE", "KFE"};
     

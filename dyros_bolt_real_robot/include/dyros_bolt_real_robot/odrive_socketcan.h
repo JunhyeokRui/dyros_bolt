@@ -18,7 +18,26 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
+struct DyrosBoltInitArgs
+{
+    char port1[20];
+    char port2[20];
 
+    int period_ns;
+    int lock_core;
+
+    int can_device; // odrv 1, odrv 2
+    int can_slave_num;
+    int can_slave_start_num;
+    int q_start_;
+
+    bool is_main;
+
+    bool verbose;
+
+    char commutation_cache_file[100]; // = "/home/dyros/.tocabi_bootlog/commutationlog";
+    char zeropoint_cache_file[100];   // = "/home/dyros/.tocabi_bootlog/zeropointlog";
+};
 
 namespace odrive {
     // ODrive command IDs
@@ -136,5 +155,55 @@ namespace odrive {
             int bytesToInt(const unsigned char* data);
     };
 }
+
+void *odrvCanThread1(void *data);
+void *odrvCanThread2(void *data);
+void *odrvCanThread3(void *data);
+// void ethercatCheck(TocabiInitArgs *targs);
+
+// double elmoJointMove(double init, double angle, double start_time, double traj_time);
+
+bool controlWordGenerate(const uint16_t statusWord, uint16_t &controlWord);
+void checkFault(const uint16_t statusWord, int slave);
+// void ecatDiagnoseOnChange();
+// void ecatDiagnose();
+void cnt_print(int cnt);
+
+bool initDyrosBoltArgs(const DyrosBoltInitArgs &args);
+bool initDyrosBoltSystem(const DyrosBoltInitArgs &args);
+void cleanupDyrosBoltSystem();
+
+void odrvInit();
+
+void checkJointSafety();
+void checkJointStatus();
+
+//void initSharedMemory();
+void sendJointStatus();
+void getJointCommand();
+
+bool saveCommutationLog();
+bool loadCommutationLog(struct timespec &commutation_time);
+
+bool saveZeroPoint();
+bool loadZeroPoint(bool force = false);
+
+
+void emergencyOff();
+
+int kbhit(void);
+
+int getElmoState(uint16_t state_bit);
+
+void findzeroLeg();
+void findZeroPointlow(int slv_number, double time_real_);
+void findZeroPoint(int slv_number, double time_real_);
+
+void getErrorName(int err_register, char *err);
+
+long getTimeDiff(struct timespec &from, struct timespec &to);
+long getTimeDiff(struct timespec &a);
+
+void shutdownSystem();
 
 #endif // ODRIVE_INTERFACE_HPP_

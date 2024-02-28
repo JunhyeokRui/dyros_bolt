@@ -1306,10 +1306,10 @@ void StateManager::GetSensorData()
     // rd_.imu_ang_acc(2) = dc_.tc_shm_->imu_gyro[2];
 
 
-    rd_.base_link_xquat_rd.x() = dc_.tc_shm_->base_link_xquat[0];
-    rd_.base_link_xquat_rd.y() = dc_.tc_shm_->base_link_xquat[1];
-    rd_.base_link_xquat_rd.z() = dc_.tc_shm_->base_link_xquat[2];
-    rd_.base_link_xquat_rd.w() = dc_.tc_shm_->base_link_xquat[3];
+    rd_.base_link_xquat_rd.x() = dc_.tc_shm_->base_link_xquat[1];
+    rd_.base_link_xquat_rd.y() = dc_.tc_shm_->base_link_xquat[2];
+    rd_.base_link_xquat_rd.z() = dc_.tc_shm_->base_link_xquat[3];
+    rd_.base_link_xquat_rd.w() = dc_.tc_shm_->base_link_xquat[0];
     
     // double dt_ = 0.0005;    
     // rd_.imu_lin_vel +=  0.5 * (current_acceleration_lin + previous_acceleration_lin) * dt_;
