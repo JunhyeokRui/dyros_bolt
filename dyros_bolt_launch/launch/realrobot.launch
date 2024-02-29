@@ -5,7 +5,8 @@
     <arg name="node_start_delay" default="0.2" />  
     <arg name="node_start_delay_can" default="0.3" />  
     
-    <param name="dyros_bolt_controller/urdf_path" type="string" value="$(find dyros_bolt_description)/mujoco_model/bolt_6dof.urdf"/>
+    <param name="dyros_bolt_controller/urdf_path" type="string " value="$(find dyros_bolt_description)/robots/bolt.urdf" />
+
     
     <node name="dyros_bolt_controller_shm_reset" pkg="dyros_bolt_controller" type="shm_reset" output="screen"/>
     
@@ -25,6 +26,7 @@
 
     <group if="$(arg gui)">
         <node name="dyros_bolt_gui" pkg="dyros_bolt_gui" type="dyros_bolt_gui" />
+        <node name="dyros_gui" pkg="dyros_gui" type="dyros_gui" />
     </group>
 
 </launch>
