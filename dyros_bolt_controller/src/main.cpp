@@ -87,7 +87,6 @@ int main(int argc, char **argv)
 
         const int thread_number = 4;
 
-
         struct sched_param param_st;
         struct sched_param param;
         struct sched_param param_controller;
@@ -111,7 +110,7 @@ int main(int argc, char **argv)
 
             std::cout << "Real Robot Mode" << std::endl;
         }
-
+//ANCHOR - not simMode
         if (!dc_.simMode)
         {
 
@@ -121,23 +120,13 @@ int main(int argc, char **argv)
             system_log << "===================================================================================================" << std::endl;
             system_log << "System Successfully Started " << std::ctime(&t_clock_start);
 
-            if (pthread_attr_setschedparam(&attrs[0], &param_st))
-            {
-                printf("attr %d setschedparam failed ", 0);
-            }
-            
-            if (pthread_attr_setschedparam(&attrs[1], &param_controller))
-            {
-                printf("attr %d setschedparam failed ", 0);
-            }
-
+//rui - CPU_ZERO and CPU_SET are used to specify the CPU affinity for the first thread attribute (attrs[0]). CPU_ZERO initializes the CPU set to be empty, and CPU_SET adds CPU 5 to the set, meaning the thread is preferred to run on CPU 5. If setting the CPU affinity fails, an error message is printed.
             CPU_ZERO(&cpusets[0]);
             CPU_SET(5, &cpusets[0]);
-            if (pthread_attr_setaffinity_np(&attrs[0], sizeof(cpu_set_t), &cpusets[0]))
+            if (pthread_attr_setaffinity_np(&attrs[0], sizeof(cpu_set_t), &cpusets[0])) //ANCHOR - pthread_attr_setaffinity_np: Sets the CPU affinity for a thread, determining which CPU(s) the thread can run on.
             {
                 printf("attr %d setaffinity failed ", 0);
             }
-
             if (pthread_attr_setschedpolicy(&loggerattrs, SCHED_FIFO))
             {
                 printf("attr logger setschedpolicy failed ");

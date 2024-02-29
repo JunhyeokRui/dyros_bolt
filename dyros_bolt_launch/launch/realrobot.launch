@@ -10,8 +10,8 @@
     <node name="dyros_bolt_controller_shm_reset" pkg="dyros_bolt_controller" type="shm_reset" output="screen"/>
     
     <node name="dyros_bolt_controller" pkg="dyros_bolt_controller" type="dyros_bolt_controller" output="screen" respawn="false" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
-        <rosparam file="$(find dyros_bolt_controller)/odrive_config/odrive.yaml" />
-        <rosparam file="$(find dyros_bolt_controller)/odrive_config/gain.yaml" />
+        <rosparam file="$(find dyros_bolt_real_robot)/odrive_config/odrive.yaml" />
+        <rosparam file="$(find dyros_bolt_real_robot)/odrive_config/gain.yaml" />
         <param name="sim_mode" value="false"/>
         <rosparam command="load" file="$(find dyros_bolt_description)/setting/setting_realrobot_positionPDgain.yaml"/>
         <rosparam command="load" file="$(find dyros_bolt_description)/setting/setting_realrobot_parameters.yaml"/>
