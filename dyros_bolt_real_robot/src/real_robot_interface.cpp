@@ -24,6 +24,7 @@ RealRobotInterface::RealRobotInterface(ros::NodeHandle &nh, double Hz):
 
     init_shm(shm_msg_key, shm_id_, &tc_shm_);
     prog_shutdown = &tc_shm_->shutdown;
+    ROS_INFO("TEST1");
 }
 
 void RealRobotInterface::axisRequestStateCallback(const std_msgs::Int16::ConstPtr& msg) {

@@ -23,21 +23,21 @@ int main(int argc, char **argv)
     nh.param<double>("control_frequency", Hz, 150.0);
 
     ctr_obj = new RealRobotInterface(nh, Hz);
+    ROS_INFO("TEST2");
+    // while(ros::ok())
+    // {
+    //     // ctr_obj->readDevice();
+    //     // ctr_obj->update();
+    //     // ctr_obj->compute();
+    //     // ctr_obj->reflect();
+    //     // ctr_obj->writeDevice();
+    //     // ctr_obj->wait();
 
-    while(ros::ok())
-    {
-        ctr_obj->readDevice();
-        ctr_obj->update();
-        // ctr_obj->compute();
-        // ctr_obj->reflect();
-        // ctr_obj->writeDevice();
-        // ctr_obj->wait();
-
-        // if(ctr_obj->isShuttingDown())
-        // {
-        //   break;
-        // }
-    }
+    //     // if(ctr_obj->isShuttingDown())
+    //     // {
+    //     //   break;
+    //     // }
+    // }
     // delete ctr_obj;
 
 
