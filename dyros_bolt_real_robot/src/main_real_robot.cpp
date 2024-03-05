@@ -26,19 +26,19 @@ int main(int argc, char **argv)
 
     while(ros::ok())
     {
-        ctr_obj->readDevice();
-        ctr_obj->update();
-        ctr_obj->compute();
-        ctr_obj->reflect();
-        ctr_obj->writeDevice();
-        ctr_obj->wait();
+        // ctr_obj->readDevice();
+        // ctr_obj->update();
+        // ctr_obj->compute();
+        // ctr_obj->reflect();
+        // ctr_obj->writeDevice();
+        // ctr_obj->wait();
 
-        if(ctr_obj->isShuttingDown())
-        {
-          break;
-        }
+        // if(ctr_obj->isShuttingDown())
+        // {
+        //   break;
+        // }
     }
-    delete ctr_obj;
+    // delete ctr_obj;
 
 
     return 0;
