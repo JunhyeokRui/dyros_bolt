@@ -26,8 +26,8 @@ int main(int argc, char **argv)
 
     while(ros::ok())
     {
-        // ctr_obj->readDevice();
-        // ctr_obj->update();
+        ctr_obj->readDevice();
+        ctr_obj->update();
         // ctr_obj->compute();
         // ctr_obj->reflect();
         // ctr_obj->writeDevice();

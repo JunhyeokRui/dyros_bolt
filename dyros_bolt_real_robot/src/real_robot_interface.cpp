@@ -109,6 +109,13 @@ void RealRobotInterface::readDevice()
 
     // std::cout << "angular_vel: " << std::endl;
     // std::cout << imu_angular_velocity << std::endl << std::endl;
+    std::cout << "q_" << std::endl;
+    std::cout << "q_dot_" << std::endl;
+    for (size_t i = 0; i < 6; i++)
+    {
+        std::cout << q_(i) << std::endl;
+        std::cout << q_dot_(i) << std::endl;
+    }
 
 }
 
