@@ -147,6 +147,7 @@ protected:
     
     VectorQd desired_q_; // current desired joint values
     VectorQd desired_torque_; // current desired torque values
+    VectorQf desired_torque_f; // current desired torque values
     Eigen::Vector12d extencoder_offset_;
 
     Eigen::Vector6d mujoco_virtual_;
@@ -154,6 +155,7 @@ protected:
 
 
     int total_dof_;
+    
 
 
 };

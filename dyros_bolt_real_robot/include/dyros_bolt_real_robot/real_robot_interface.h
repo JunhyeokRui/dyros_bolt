@@ -25,7 +25,7 @@ class RealRobotInterface : public ControlBase
 public:
     SHMmsgs *tc_shm_;
     int shm_id_;
-
+    float torque_desired_[MODEL_DOF];      // get torque command
     std::string ctrl_mode;
 
     RealRobotInterface(ros::NodeHandle &nh, double Hz);
@@ -37,7 +37,6 @@ public:
     virtual void wait() override;
 
     void axisRequestStateCallback(const std_msgs::Int16::ConstPtr& msg);
-    
     odrive::ODriveSocketCan odrv;
 
 private:

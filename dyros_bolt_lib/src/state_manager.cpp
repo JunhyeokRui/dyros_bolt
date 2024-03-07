@@ -1076,6 +1076,10 @@ void StateManager::SendCommand()
     }
 
     dc_.tc_shm_->cmd_lower = true;
+    cout << "torque_command input from state manager" << endl;
+    for (int i = 0; i < MODEL_DOF; i++)
+            torque_command[i] = 1.0;
+    
     std::copy(torque_command, torque_command + 6, dc_.tc_shm_->torqueCommand);
     
     dc_.tc_shm_->cmd_lower = false;

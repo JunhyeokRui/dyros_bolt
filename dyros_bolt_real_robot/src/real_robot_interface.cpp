@@ -1,6 +1,9 @@
 #include "dyros_bolt_real_robot/real_robot_interface.h"
 
 volatile bool *prog_shutdown;
+int shm_id_;
+SHMmsgs *shm_msgs_;
+
 
 void SIGINT_handler(int sig)
 {
@@ -80,14 +83,14 @@ void RealRobotInterface::readDevice()
         q_(i) = -odrv.axis_angle[i];
         q_dot_(i) = odrv.axis_velocity[i];
 
-        q_(i+4) = odrv.axis_angle[i+3];
-        q_dot_(i+4) = odrv.axis_velocity[i+3];
+        q_(i+3) = odrv.axis_angle[i+3];
+        q_dot_(i+3) = odrv.axis_velocity[i+3];
     }
-    q_(4) = -q_(4);
-    q_[3] = 0;
-    q_[7] = 0;
-    q_dot_[3] =0;
-    q_dot_[7] =0;
+    q_(3) = -q_(3);
+    // q_[3] = 0;
+    // q_[7] = 0;
+    // q_dot_[3] =0;
+    // q_dot_[7] =0;
 
     imu_data_quat(0) = tc_shm_->pos_virtual[0];
     imu_data_quat(1) = tc_shm_->pos_virtual[1];
@@ -111,10 +114,14 @@ void RealRobotInterface::readDevice()
     // std::cout << "angular_vel: " << std::endl;
     // std::cout << imu_angular_velocity << std::endl << std::endl;
     std::cout << "q_" << std::endl;
-    std::cout << "q_dot_" << std::endl;
     for (size_t i = 0; i < 6; i++)
     {
         std::cout << q_(i) << std::endl;
+        
+    }
+    std::cout << "q_dot_" << std::endl;
+    for (size_t i = 0; i < 6; i++)
+    {
         std::cout << q_dot_(i) << std::endl;
     }
 
@@ -123,21 +130,26 @@ void RealRobotInterface::readDevice()
 void RealRobotInterface::update()
 {
     ControlBase::update();
+
+    std::copy(tc_shm_->torqueCommand, tc_shm_->torqueCommand + 6, torque_desired_);
+
+    // Assuming torque_desired_ is an array or supports indexing and has a size of 6
+    for(int i = 0; i < 6; ++i) {
+        std::cout << "torque_desired_[" << i << "] = " << torque_desired_[i] << std::endl;
+    }
 }
 
 void RealRobotInterface::writeDevice()
 {
     if(areMotorsReady()){
         // if (ctrl_mode == "torque"){
-        for(int i=0; i<  MODEL_DOF / 2 - 1; i++)
-        {
+        
+        // for(int i=0; i<  MODEL_DOF / 2; i++)
+        // {
+        //     odrv.setInputTorque(i, float(-torque_desired_(i)/k_tau[i]));
+        //     odrv.setInputTorque(i+3, float(torque_desired_(i+3)/k_tau[i+3]));
 
-            // std::cout << desired_torque_(i)/k_tau[i] << std::endl;
-            odrv.setInputTorque(i, double(-desired_torque_(i)/k_tau[i]));
-            odrv.setInputTorque(i+3, double(desired_torque_(i+4)/k_tau[i+3]));
-            if(i == 0)
-                odrv.setInputTorque(i+4, double(-desired_torque_(i)/k_tau[i]) );
-        }
+        // }
         // }
         // else if (ctrl_mode == "position"){
         //     for(int i=0; i<  MODEL_DOF / 2 - 1; i++)
@@ -146,6 +158,8 @@ void RealRobotInterface::writeDevice()
         //         odrv.setInputPosition(i+3, double(desired_q_(i+4)));
         //     }
         // }
+
+
     }
 }
 
@@ -174,5 +188,41 @@ void RealRobotInterface::axisCurrentPublish()
     }
     axis_current_state_pub.publish(state_msgs);
 }
+
+// void RealRobotInterface::cleanupDyrosBoltSystem()
+// {
+//     init_shm(shm_msg_key, shm_id_, &shm_msgs_);
+// }
+// void RealRobotInterface::initDyrosBoltSystem()
+// {
+//     deleteSharedMemory(shm_id_, shm_msgs_);
+// }
+
+// void RealRobotInterface::getJointTorque()
+// {
+    
+//     timespec ts_us1;
+
+//     ts_us1.tv_sec = 0;
+//     ts_us1.tv_nsec = 1000;
+
+    
+//     std::cout <<"test comupte0" << std::endl;
+//     std::cout << "shm_msgs_->cmd_lower : " << shm_msgs_->cmd_lower << std::endl;
+//     while (shm_msgs_->cmd_lower)
+//     {
+//         std::cout <<"test comupte0-1" << std::endl;
+//         clock_nanosleep(CLOCK_MONOTONIC, 0, &ts_us1, NULL);
+//     };
+//     std::cout <<"test comupte1" << std::endl;
+//     shm_msgs_->cmd_lower = true;
+//     std::cout <<"test comupte2" << std::endl;
+//     memcpy(&torque_desired_[0], &shm_msgs_->torqueCommand[0], sizeof(float) * MODEL_DOF);
+
+//     shm_msgs_->cmd_lower = false;
+
+//     std::cout <<"test comupte3" << std::endl;
+// }
+
 
 }

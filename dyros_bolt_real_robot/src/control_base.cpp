@@ -12,11 +12,14 @@ ControlBase::ControlBase(ros::NodeHandle &nh, double Hz) :
   joint_control_as_(nh, "/dyros_bolt/joint_control", false)
 {
   makeIDInverseList();
+  // SHMmsgs *shm_msgs_;
+  float torque_desired_[MODEL_DOF];      // get torque command
+  
   //joint_control_as_
   joint_control_as_.start();
   joint_state_pub_.init(nh, "/dyros_bolt/joint_state", 3);
   joint_state_pub_.msg_.name.resize( MODEL_DOF);
-  joint_state_pub_.msg_.angle.resize( MODEL_DOF);
+  joint_state_pub_.msg_.angle.resize( MODEL_DOF);   
   joint_state_pub_.msg_.velocity.resize( MODEL_DOF);
   joint_state_pub_.msg_.current.resize( MODEL_DOF);
   joint_state_pub_.msg_.error.resize( MODEL_DOF);
@@ -120,6 +123,11 @@ void ControlBase::update()
 
 void ControlBase::compute()
 {
+  // timespec ts_us1;
+
+  // ts_us1.tv_sec = 0;
+  // ts_us1.tv_nsec = 1000;
+
 
   // joint_controller_.compute();
   // custom_controller_.compute();
@@ -133,28 +141,47 @@ void ControlBase::compute()
   // custom_controller_.writeDesired(control_mask_, desired_q_);
   // rl_controller_.writeDesired(control_mask_, desired_torque_);
 
-#ifdef COMPILE_SHAREDMEMORY
+// #ifdef COMPILE_SHAREDMEMORY
+//   std::cout << "SHM_COMPILED" << std::endl;
+//   while (tc_shm_->commanding)
+//   {
+//       std::this_thread::sleep_for(std::chrono::microseconds(1));
+//   }
+  
+//   for (int i = 0; i < MODEL_DOF; i++)
+//       desired_torque_[i] = &shm_msgs->torqueCommand[i];
 
-  while (mj_shm_->commanding)
-  {
-      std::this_thread::sleep_for(std::chrono::microseconds(1));
-  }
-  
-  for (int i = 0; i < MODEL_DOF; i++)
-      desired_torque_[i] = mj_shm_->torqueCommand[i];
+      // shm_msgs_->cmd_lower = true;
+      //   memcpy(&torque_desired_[Q_START], &shm_msgs_->torqueCommand[Q_START], sizeof(float) * PART_ELMO_DOF);
+      //   // memcpy(&max_cnt_[Q_START], &shm_msgs_->max_cnt_[Q_START], sizeof(int) * PART_ELMO_DOF);
+      // shm_msgs_->cmd_lower = false;
                   
-#else
-  std::cout << "WARNING : Getting command, while SHM_NOT_COMPILED " << std::endl;
-#endif
-  
+// #else
+//   std::cout << "WARNING : Getting command, while SHM_NOT_COMPILED " << std::endl;
+// #endif
+  // std::cout <<"test comupte0" << std::endl;
+  // std::cout << "shm_msgs_->cmd_lower : " << shm_msgs_->cmd_lower << std::endl;
+  // while (shm_msgs_->cmd_lower)
+  // {
+  //   std::cout <<"test comupte0-1" << std::endl;
+  //   clock_nanosleep(CLOCK_MONOTONIC, 0, &ts_us1, NULL);
+  // };
+  // std::cout <<"test comupte1" << std::endl;
+  // shm_msgs_->cmd_lower = true;
+  // std::cout <<"test comupte2" << std::endl;
+  // memcpy(&torque_desired_[0], &shm_msgs_->torqueCommand[0], sizeof(float) * MODEL_DOF);
+
+  // shm_msgs_->cmd_lower = false;
+
+  // std::cout <<"test comupte3" << std::endl;
   // Torque Control
-  for (int i = 0; i <  MODEL_DOF; i++)
-  {
-    // desired_torque_[i] = pos_kp[i] * (desired_q_[i] - q_[i]) + pos_kv[i] * (q_dot_filtered_[i]);
-    // desired_torque_[i] = desired_q_(i);
-    // desired_torque_[i] = model_.command_Torque(i);
-    std::cout << "desired_torque_[i] : " << desired_torque_.transpose() << std::endl;
-  }
+  // for (int i = 0; i <  MODEL_DOF; i++)
+  // {
+  //   // desired_torque_[i] = pos_kp[i] * (desired_q_[i] - q_[i]) + pos_kv[i] * (q_dot_filtered_[i]);
+  //   // desired_torque_[i] = desired_q_(i);
+  //   // desired_torque_[i] = model_.command_Torque(i);
+  // }
+  // std::cout << "desired_torque_[i] : " << torque_desired_ << std::endl;
 
   tick_ ++;
   control_time_ = tick_ / Hz_;
@@ -210,6 +237,14 @@ void ControlBase::reflect()
   //     walkingState_msg.data = walking_controller_.walking_end_;
   //     walkingstate_command_pub_.publish(walkingState_msg);
   //   }
+  // void ControlBase::initDyrosBoltSystem()
+  // {
+
+  // }
+  // void ControlBase::cleanupDyrosBoltSystem()
+  // {
+
+  // }
 }
 
 // void ControlBase::jointControlActionCallback(const dyros_bolt_msgs::JointControlGoalConstPtr &goal)
@@ -262,3 +297,4 @@ void ControlBase::reflect()
 //     shutdown_flag_ = true;
 //   }
 // }
+
