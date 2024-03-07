@@ -829,7 +829,7 @@ void StateManager::SendCommand()
     }
     dc_.t_c_ = true;
     std::copy(dc_.torque_command, dc_.torque_command + MODEL_DOF, torque_command);
-
+    
     //rui - for debug start
         // std::cout << "dc_.torque_command stm" << std::endl;
         // for (int i = 0; i < 6; ++i) {
@@ -1079,6 +1079,7 @@ void StateManager::SendCommand()
     cout << "torque_command input from state manager" << endl;
     for (int i = 0; i < MODEL_DOF; i++)
             torque_command[i] = 1.0;
+            std::cout << "state_manager" << std::endl;
     
     std::copy(torque_command, torque_command + 6, dc_.tc_shm_->torqueCommand);
     
