@@ -37,26 +37,20 @@ bool initDyrosBoltArgs(const DyrosBoltInitArgs &args)
 
     if (shm_msgs_->shutdown == true)
     {
-
+        std::cout << "SHUTDOWN -> TRUE" << std::endl;
+        std::cout << "CAN : shm_reset" << std::endl;
     }
-
 
     return true;
 }
 
 bool initDyrosBoltSystem(const DyrosBoltInitArgs &args)
 {
-    makeIDInverseList();
     
 
 
 
     return true;
-}
-
-void makeIDInverseList()
-{
-
 }
 
 void shutdownSystem()
@@ -71,8 +65,57 @@ void cleanupDyrosBoltSystem()
 
 void *ethercatThread1(void *data)
 {
-
     DyrosBoltInitArgs *init_args = (DyrosBoltInitArgs *)data;
+
+    while (!DyrosBoltInitialization)
+    {
+        std::cout << " ODRV : START Initialization Mode" << std::endl;
+
+        int16_t requestState = msg->data;
+    
+        switch (requestState) {
+            case 1:
+                odrv.disengage();
+                break;
+            case 2:
+                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                    odrv.requestODriveCmd(i, odrive::ODriveCommandId::ESTOP_MESSAGE);
+                }
+                break;    
+            case 4:
+                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                    odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
+                }
+                break;
+            case 7:
+                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                    odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
+                }
+                break;
+            case 8:
+                odrv.engage();
+                // for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
+                // {
+                //     // odrv.setInputTorque(i, 0);
+                //     // odrv.setInputTorque(i+3,0);
+                // }
+                break;
+            case 16:
+                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                    odrv.requestODriveCmd(i, odrive::ODriveCommandId::REBOOT_ODRIVE);
+                }
+                break;
+            case 19:
+                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                    odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
+                }
+                break;    
+        }
+        if (DyrosBoltInitialization){
+            break;
+        }
+        std::cout << " ODRV : Initialization Mode Failed. Retrying..." << std::endl;
+    }
 
     if (shm_msgs_->shutdown)
         printf("Shutdown Command Before Start\n");
@@ -87,10 +130,14 @@ void *ethercatThread1(void *data)
         {
             std::cout << "test3" << std::endl;
             readDevice();
+            std::cout << "test3-1" << std::endl;
             sendJointStatus();
+            std::cout << "test3-2" << std::endl;
             update();
+            std::cout << "test3-3" << std::endl;
             getJointCommand();
-            writeDevice();
+            std::cout << "test3-4" << std::endl;
+            // writeDevice();
         }
 
 
@@ -162,7 +209,6 @@ void writeDevice(){
             {
                 odrv.setInputTorque(i, float(-torque_desired_[i]/k_tau[i]));
                 odrv.setInputTorque(i+3, float(torque_desired_[i+3]/k_tau[i+3]));
-
             }
 
         }
@@ -229,7 +275,9 @@ void getJointCommand()
     };
     shm_msgs_->cmd_lower = true;
     memcpy(&torque_desired_[Q_START], &shm_msgs_->torqueCommand[Q_START], sizeof(float) * PART_CAN_DOF);
-    
+    for(int i = Q_START; i < Q_START + PART_CAN_DOF; i++) {
+        std::cout << "torque_desired_[" << i << "] = " << torque_desired_[i] << std::endl;
+    }
     shm_msgs_->cmd_lower = false;
 
     commandCount = shm_msgs_->commandCount;
@@ -281,8 +329,8 @@ int kbhit(void)
 bool areMotorsReady()
 {
     for(int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-    // for(int i = 0; i < 1; i++) {
         if(odrv.axis_current_state[i] != 8) {
+            std::cout << "motor is not ready" << std::endl;
             return false;
         }
     }
