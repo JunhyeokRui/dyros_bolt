@@ -67,55 +67,55 @@ void *ethercatThread1(void *data)
 {
     DyrosBoltInitArgs *init_args = (DyrosBoltInitArgs *)data;
 
-    while (!DyrosBoltInitialization)
-    {
-        std::cout << " ODRV : START Initialization Mode" << std::endl;
+    // while (!DyrosBoltInitialization)
+    // {
+    //     std::cout << " ODRV : START Initialization Mode" << std::endl;
 
-        int16_t requestState = msg->data;
+    //     int16_t requestState = msg->data;
     
-        switch (requestState) {
-            case 1:
-                odrv.disengage();
-                break;
-            case 2:
-                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                    odrv.requestODriveCmd(i, odrive::ODriveCommandId::ESTOP_MESSAGE);
-                }
-                break;    
-            case 4:
-                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                    odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
-                }
-                break;
-            case 7:
-                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                    odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
-                }
-                break;
-            case 8:
-                odrv.engage();
-                // for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
-                // {
-                //     // odrv.setInputTorque(i, 0);
-                //     // odrv.setInputTorque(i+3,0);
-                // }
-                break;
-            case 16:
-                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                    odrv.requestODriveCmd(i, odrive::ODriveCommandId::REBOOT_ODRIVE);
-                }
-                break;
-            case 19:
-                for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                    odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
-                }
-                break;    
-        }
-        if (DyrosBoltInitialization){
-            break;
-        }
-        std::cout << " ODRV : Initialization Mode Failed. Retrying..." << std::endl;
-    }
+    //     switch (requestState) {
+    //         case 1:
+    //             odrv.disengage();
+    //             break;
+    //         case 2:
+    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //                 odrv.requestODriveCmd(i, odrive::ODriveCommandId::ESTOP_MESSAGE);
+    //             }
+    //             break;    
+    //         case 4:
+    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //                 odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
+    //             }
+    //             break;
+    //         case 7:
+    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //                 odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
+    //             }
+    //             break;
+    //         case 8:
+    //             odrv.engage();
+    //             // for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
+    //             // {
+    //             //     // odrv.setInputTorque(i, 0);
+    //             //     // odrv.setInputTorque(i+3,0);
+    //             // }
+    //             break;
+    //         case 16:
+    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //                 odrv.requestODriveCmd(i, odrive::ODriveCommandId::REBOOT_ODRIVE);
+    //             }
+    //             break;
+    //         case 19:
+    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //                 odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
+    //             }
+    //             break;    
+    //     }
+    //     if (DyrosBoltInitialization){
+    //         break;
+    //     }
+    //     std::cout << " ODRV : Initialization Mode Failed. Retrying..." << std::endl;
+    // }
 
     if (shm_msgs_->shutdown)
         printf("Shutdown Command Before Start\n");
@@ -258,16 +258,16 @@ void getJointCommand()
 
     cpu_relax();
 
-    static int stloop;
-    static bool stloop_check;
-    stloop_check = false;
-    if (stloop == shm_msgs_->stloopCount)
-    {
-        stloop_check = true;
-    }
-    stloop = shm_msgs_->stloopCount;
-    static int commandCount;
-    int wait_tick;
+    // static int stloop;
+    // static bool stloop_check;
+    // stloop_check = false;
+    // if (stloop == shm_msgs_->stloopCount)
+    // {
+    //     stloop_check = true;
+    // }
+    // stloop = shm_msgs_->stloopCount;
+    // static int commandCount;
+    // int wait_tick;
 
     while (shm_msgs_->cmd_lower)
     {
@@ -280,25 +280,25 @@ void getJointCommand()
     }
     shm_msgs_->cmd_lower = false;
 
-    commandCount = shm_msgs_->commandCount;
+    // commandCount = shm_msgs_->commandCount;
 
-    static int commandCount_before = -1;
-    static int commandCount_before2 = -1;
-    static int errorCount = -2;
-    static int errorTimes = 0;
+    // static int commandCount_before = -1;
+    // static int commandCount_before2 = -1;
+    // static int errorCount = -2;
+    // static int errorTimes = 0;
 
-    static bool start_observe = false;
+    // static bool start_observe = false;
 
-    if (!start_observe)
-    {
-        if (shm_msgs_->controlModeUpper && shm_msgs_->controlModeUpper)
-        {
-            start_observe = true;
-        }
-    }
+    // if (!start_observe)
+    // {
+    //     if (shm_msgs_->controlModeUpper && shm_msgs_->controlModeUpper)
+    //     {
+    //         start_observe = true;
+    //     }
+    // }
 
-    commandCount_before2 = commandCount_before;
-    commandCount_before = commandCount;
+    // commandCount_before2 = commandCount_before;
+    // commandCount_before = commandCount;
 
 }
 
