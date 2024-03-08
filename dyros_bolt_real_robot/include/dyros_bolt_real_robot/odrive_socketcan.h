@@ -18,26 +18,6 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
-struct DyrosBoltInitArgs
-{
-    char port1[20];
-    char port2[20];
-
-    int period_ns;
-    int lock_core;
-
-    int can_device; // odrv 1, odrv 2
-    int can_slave_num;
-    int can_slave_start_num;
-    int q_start_;
-
-    bool is_main;
-
-    bool verbose;
-
-    char commutation_cache_file[100]; // = "/home/dyros/.tocabi_bootlog/commutationlog";
-    char zeropoint_cache_file[100];   // = "/home/dyros/.tocabi_bootlog/zeropointlog";
-};
 
 namespace odrive {
     // ODrive command IDs
@@ -109,7 +89,7 @@ namespace odrive {
 
     class ODriveSocketCan {
         public:
-            ODriveSocketCan(ros::NodeHandle &nh);
+            ODriveSocketCan();
             ~ODriveSocketCan() { disengage();}
             double getAxisAngle();
             double getAxisVelocity();
@@ -138,7 +118,7 @@ namespace odrive {
             double axis_current[6] = {0,0,0,0,0,0};
 
         private:
-            ros::NodeHandle node;
+            // ros::NodeHandle node;
             int socketcan;
 
             double update_rate_;
@@ -156,6 +136,9 @@ namespace odrive {
     };
 }
 
+
+
+
 void *odrvCanThread1(void *data);
 void *odrvCanThread2(void *data);
 void *odrvCanThread3(void *data);
@@ -169,11 +152,11 @@ void checkFault(const uint16_t statusWord, int slave);
 // void ecatDiagnose();
 void cnt_print(int cnt);
 
-bool initDyrosBoltArgs(const DyrosBoltInitArgs &args);
-bool initDyrosBoltSystem(const DyrosBoltInitArgs &args);
-void cleanupDyrosBoltSystem();
 
-void odrvInit();
+
+
+
+void sendJointStatus();
 
 void checkJointSafety();
 void checkJointStatus();
@@ -186,7 +169,6 @@ bool saveCommutationLog();
 bool loadCommutationLog(struct timespec &commutation_time);
 
 bool saveZeroPoint();
-bool loadZeroPoint(bool force = false);
 
 
 void emergencyOff();

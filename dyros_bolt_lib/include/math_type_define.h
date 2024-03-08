@@ -1713,4 +1713,4 @@ namespace DyrosMath
     }
   }
 } // namespace DyrosMath
-#endif
+#endif // MATH_TYPE_DEFINE_H

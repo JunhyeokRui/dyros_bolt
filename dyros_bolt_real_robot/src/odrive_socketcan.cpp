@@ -2,10 +2,9 @@
 // std::ofstream outFile("/home/yong/data.txt");
 
 namespace odrive {
-    ODriveSocketCan::ODriveSocketCan(ros::NodeHandle &nh):
-        node(nh)
+    ODriveSocketCan::ODriveSocketCan()
     {
-        node.getParam("axis_can_ids", axis_can_ids_list);
+        // getParam("axis_can_ids", axis_can_ids_list);
         const char* ifname = "can0"; // Replace with your CAN interface name
         struct sockaddr_can addr;
         struct ifreq ifr;
