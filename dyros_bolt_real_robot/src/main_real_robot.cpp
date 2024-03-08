@@ -14,6 +14,7 @@ int main(int argc, char **argv)
 {
     mlockall(MCL_CURRENT | MCL_FUTURE);
     signal(SIGINT, SIGINT_handler);
+    std::cout << "test1" << std::endl;
     
     
     DyrosBoltInitArgs init_args;
@@ -22,7 +23,6 @@ int main(int argc, char **argv)
     init_args.q_start_ = max_jnum;
 
     initDyrosBoltArgs(init_args);
-
     
     bool init_result = initDyrosBoltSystem(init_args);
     if (!init_result)
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     }
 
     ethercatThread1(&init_args);
-
+    std::cout << "test5" << std::endl;
 
     printf("[CAN - INFO] cleaning up\n");
     cleanupDyrosBoltSystem();

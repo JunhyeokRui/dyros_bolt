@@ -79,12 +79,13 @@ void *ethercatThread1(void *data)
 
     while (!shm_msgs_->shutdown)
     {
-
+        std::cout << "test2" << std::endl;
         if (!shm_msgs_->shutdown)
             printf(" REALROBOT : Control Mode Start ... ");
 
         while (!shm_msgs_->shutdown)
         {
+            std::cout << "test3" << std::endl;
             readDevice();
             sendJointStatus();
             update();
@@ -94,7 +95,7 @@ void *ethercatThread1(void *data)
 
 
     }
-    
+    std::cout << "test4" << std::endl;
     return (void *)NULL;
 
 }
