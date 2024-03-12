@@ -107,8 +107,8 @@ void *DyrosBoltController::Thread1()
 
     std::cout << " Thread1 Proceeding ... " << std::endl;
 
-    EnableThread2(true); // Set true for Thread2
-    EnableThread3(true); // True for thread3 ...
+    // EnableThread2(true); // Set true for Thread2
+    // EnableThread3(true); // True for thread3 ...
 
     if (dc_.simMode)
     {
