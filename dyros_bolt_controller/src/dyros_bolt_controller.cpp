@@ -238,7 +238,7 @@ void *DyrosBoltController::Thread1()
             auto d2 = std::chrono::duration_cast<std::chrono::microseconds>(t_end - rd_.tp_state_).count(); // 150us without march=native
 
             static int d1_over_cnt = 0;
-
+            std::cout << "DBC : 5" << std::endl;
             if (d1 > 500) 
             {
 
@@ -250,7 +250,7 @@ void *DyrosBoltController::Thread1()
 
             d2_total += d2;
             d1_total += d1;
-
+            std::cout << "DBC : 6" << std::endl;
             dc_.tcm_cnt = thread1_count;
             if (thread1_count % 2000 == 0) 
             {
