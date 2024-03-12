@@ -294,6 +294,10 @@ void getJointCommand()
             std::cout << "torque_desired_[" << i << "] = " << torque_desired_[i] << std::endl;
         }
         std::cout << "test3-3-6" << std::endl;
+        std::cout << "test3-3-6" << std::endl;
+        std::cout << "test3-3-6" << std::endl;
+        std::cout << "test3-3-6" << std::endl;
+        std::cout << "test3-3-6" << std::endl;
         shm_msgs_->cmd_lower = false;
         std::cout << "test3-3-7" << std::endl;
 
