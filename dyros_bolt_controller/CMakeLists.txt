@@ -33,7 +33,6 @@ find_package(Boost REQUIRED COMPONENTS system thread)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
-ADD_DEFINITIONS(-DCOMPILE_REALROBOT)
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -130,8 +129,10 @@ catkin_package(
 
 execute_process(COMMAND uname -r OUTPUT_VARIABLE UNAME_RES OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-message(" Controller : simulation only compile mode ")
-ADD_DEFINITIONS(-DCOMPILE_SIMULATION)
+# message(" Controller : simulation only compile mode ")
+# ADD_DEFINITIONS(-DCOMPILE_SIMULATION)
+message(" Realrobot compile mode ")
+ADD_DEFINITIONS(-DCOMPILE_REALROBOT)
 
 IF(dyros_bolt_cc_FOUND)
   message(" -- dyros_bolt_cc found" )
