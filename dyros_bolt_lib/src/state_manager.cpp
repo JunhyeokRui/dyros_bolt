@@ -127,20 +127,16 @@ void *StateManager::StateThread()
         //////////////////////////////
         //////////State Loop//////////
         //////////////////////////////
-        std::cout << "!!SM-1-1!!" << std::endl;
         auto t0 = std::chrono::steady_clock::now();
-        std::cout << "!!SM-1-2!!" << std::endl;
-        while (!dc_.tc_shm_->triggerS1)
-        {
-            std::cout << "!!SM-1-3!!" << std::endl;
-            clock_nanosleep(CLOCK_MONOTONIC, 0, &tv_us1, NULL);
+        // while (!dc_.tc_shm_->triggerS1)
+        // {
+        //     clock_nanosleep(CLOCK_MONOTONIC, 0, &tv_us1, NULL);
 
-            __asm__("pause" ::
-                        : "memory");
-            if (dc_.tc_shm_->shutdown)
-                break;
-            std::cout << "!!SM-1-4!!" << std::endl;
-        }
+        //     __asm__("pause" ::
+        //                 : "memory");
+        //     if (dc_.tc_shm_->shutdown)
+        //         break;
+        // }
         std::cout << "!!SM-2!!" << std::endl;
         rd_.tp_state_ = std::chrono::steady_clock::now();
         auto t1 = rd_.tp_state_;
