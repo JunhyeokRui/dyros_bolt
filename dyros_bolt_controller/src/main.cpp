@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     }
     else{
 
-        const int thread_number = 4;
+        const int thread_number = 1;
 
         struct sched_param param_st;
         struct sched_param param;
