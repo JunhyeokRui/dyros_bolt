@@ -137,13 +137,14 @@ void *DyrosBoltController::Thread1()
         }
         std::cout << " CNTRL : Set with realrobot gain" << std::endl;
     }
-
+    std::cout << "DBC : 1" << std::endl;
     signalThread1 = true;
     int thread1_count = 0;
     while (!dc_.tc_shm_->shutdown) //ANCHOR - while not shutdown
     { 
         if (dc_.triggerThread1)
-        {
+        {   
+            std::cout << "DBC : 2" << std::endl;
             dc_.triggerThread1 = false;
 
             thread1_count++;
@@ -179,7 +180,7 @@ void *DyrosBoltController::Thread1()
                 std::cout << " CNTRL : Position Hold!" << rd_.control_time_ << std::endl;
 
             }
-
+            std::cout << "DBC : 3" << std::endl;
             if (rd_.pc_mode) //ANCHOR - position control mode
             { 
 
@@ -226,7 +227,7 @@ void *DyrosBoltController::Thread1()
                 // rd_.torque_desired = WBC::ContactForceRedistributionTorque(rd_, WBC::GravityCompensationTorque(rd_));
             }
 
-
+            std::cout << "DBC : 4" << std::endl;
             static std::chrono::steady_clock::time_point t_c_ = std::chrono::steady_clock::now();
 
             SendCommand(rd_.torque_desired);
