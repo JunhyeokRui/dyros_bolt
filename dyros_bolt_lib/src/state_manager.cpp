@@ -1085,7 +1085,7 @@ void StateManager::SendCommand()
     std::copy(torque_command, torque_command + 6, dc_.tc_shm_->torqueCommand);
     
     dc_.tc_shm_->cmd_lower = false;
-
+    
     dc_.tc_shm_->commanding.store(false);
 
     // dc_.tc_shm_->commandCount++;

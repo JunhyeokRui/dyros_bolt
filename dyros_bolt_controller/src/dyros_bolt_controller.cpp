@@ -267,6 +267,7 @@ void *DyrosBoltController::Thread1()
                 rd_.state_ctime_total_ = 0;
             }
             t_c_ = std::chrono::steady_clock::now();
+            std::cout << "DBC : 7" << std::endl;
 
         }
         else 
