@@ -283,7 +283,7 @@ void getJointCommand()
     }
     std::cout << "test3-3-6" << std::endl;
     shm_msgs_->cmd_lower = false;
-
+    std::cout << "test3-3-7" << std::endl;
     // commandCount = shm_msgs_->commandCount;
 
     // static int commandCount_before = -1;
