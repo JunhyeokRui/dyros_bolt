@@ -139,7 +139,7 @@ void *StateManager::StateThread()
                         : "memory");
             if (dc_.tc_shm_->shutdown)
                 break;
-            std::cout << "!!SM-1-3!!" << std::endl;
+            std::cout << "!!SM-1-4!!" << std::endl;
         }
         std::cout << "!!SM-2!!" << std::endl;
         rd_.tp_state_ = std::chrono::steady_clock::now();
