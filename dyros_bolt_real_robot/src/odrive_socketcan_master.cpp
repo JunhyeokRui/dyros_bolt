@@ -118,7 +118,7 @@ void *ethercatThread1(void *data)
     //     }
     //     std::cout << " ODRV : Initialization Mode Failed. Retrying..." << std::endl;
     // }
-
+    shm_msgs_->shutdown = true;
     if (shm_msgs_->shutdown)
         printf("Shutdown Command Before Start\n");
 
