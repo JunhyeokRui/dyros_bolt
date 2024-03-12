@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     }
     else{
 
-        const int thread_number = 1;
+        const int thread_number = 2;
 
         struct sched_param param_st;
         struct sched_param param;
@@ -150,14 +150,14 @@ int main(int argc, char **argv)
             
             printf("threads[1] create failed\n");
         }
-        if (pthread_create(&threads[2], &attrs[2], &DyrosBoltController::Thread2Starter, &tc_)){
+        // if (pthread_create(&threads[2], &attrs[2], &DyrosBoltController::Thread2Starter, &tc_)){
             
-            printf("threads[2] create failed\n");
-        }
-        if (pthread_create(&threads[3], &attrs[3], &DyrosBoltController::Thread3Starter, &tc_)){
+        //     printf("threads[2] create failed\n");
+        // }
+        // if (pthread_create(&threads[3], &attrs[3], &DyrosBoltController::Thread3Starter, &tc_)){
             
-            printf("threads[3] create failed\n");
-        }
+        //     printf("threads[3] create failed\n");
+        // }
         if (true)
         {
 
