@@ -302,27 +302,27 @@ void *StateManager::StateThread()
 
             pub_once = false;
         }
+        //rui temp commented
+        // if (dc_.stm_cnt % 10 == 0 && !dc_.simMode)
+        // {
+        //     int e_cnt_l = dc_.tc_shm_->statusCount;
+        //     int stm_diff_l = dc_.stm_cnt - e_cnt_l;
+        //     int tcm_diff_l = dc_.tcm_cnt - e_cnt_l + 1;
 
-        if (dc_.stm_cnt % 10 == 0 && !dc_.simMode)
-        {
-            int e_cnt_l = dc_.tc_shm_->statusCount;
-            int stm_diff_l = dc_.stm_cnt - e_cnt_l;
-            int tcm_diff_l = dc_.tcm_cnt - e_cnt_l + 1;
+        //     if (abs(stm_diff - stm_diff_l) > 1)
+        //     {
+        //         // StatusPub("STATUS : STM DESYNC AT %7.1f, ecat cnt : %d, stm cnt : %d, dcm cnt : %d, %d, %d", control_time_, e_cnt_l, (int)dc_.stm_cnt - e_cnt_l, (int)dc_.tcm_cnt - e_cnt_l, stm_diff, stm_diff_l);
+        //         printf("STATUS : STM DESYNC AT %7.1f, ecat cnt : %d, stm cnt : %d, dcm cnt : %d\n", control_time_, e_cnt_l, (int)dc_.stm_cnt - e_cnt_l, (int)dc_.tcm_cnt - e_cnt_l);
+        //         stm_diff = stm_diff_l;
+        //     }
 
-            if (abs(stm_diff - stm_diff_l) > 1)
-            {
-                // StatusPub("STATUS : STM DESYNC AT %7.1f, ecat cnt : %d, stm cnt : %d, dcm cnt : %d, %d, %d", control_time_, e_cnt_l, (int)dc_.stm_cnt - e_cnt_l, (int)dc_.tcm_cnt - e_cnt_l, stm_diff, stm_diff_l);
-                printf("STATUS : STM DESYNC AT %7.1f, ecat cnt : %d, stm cnt : %d, dcm cnt : %d\n", control_time_, e_cnt_l, (int)dc_.stm_cnt - e_cnt_l, (int)dc_.tcm_cnt - e_cnt_l);
-                stm_diff = stm_diff_l;
-            }
-
-            if (abs(tcm_diff - tcm_diff_l) > 1)
-            {
-                // StatusPub("STATUS : TCM DESYNC AT %7.1f, ecat cnt : %d, stm cnt : %d, dcm cnt : %d, %d, %d", control_time_, e_cnt_l, (int)dc_.stm_cnt - e_cnt_l, (int)dc_.tcm_cnt - e_cnt_l, tcm_diff, tcm_diff_l);
-                printf("STATUS : TCM DESYNC AT %7.1f, ecat cnt : %d, stm cnt : %d, dcm cnt : %d\n", control_time_, e_cnt_l, (int)dc_.stm_cnt - e_cnt_l, (int)dc_.tcm_cnt - e_cnt_l);
-                tcm_diff = tcm_diff_l;
-            }
-        }
+        //     if (abs(tcm_diff - tcm_diff_l) > 1)
+        //     {
+        //         // StatusPub("STATUS : TCM DESYNC AT %7.1f, ecat cnt : %d, stm cnt : %d, dcm cnt : %d, %d, %d", control_time_, e_cnt_l, (int)dc_.stm_cnt - e_cnt_l, (int)dc_.tcm_cnt - e_cnt_l, tcm_diff, tcm_diff_l);
+        //         printf("STATUS : TCM DESYNC AT %7.1f, ecat cnt : %d, stm cnt : %d, dcm cnt : %d\n", control_time_, e_cnt_l, (int)dc_.stm_cnt - e_cnt_l, (int)dc_.tcm_cnt - e_cnt_l);
+        //         tcm_diff = tcm_diff_l;
+        //     }
+        // }
 
         if ((d1 + d2 + d3 + d4) > 500)
         {
