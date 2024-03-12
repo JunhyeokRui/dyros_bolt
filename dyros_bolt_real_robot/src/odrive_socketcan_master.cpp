@@ -22,6 +22,8 @@ unsigned int joint_id_inversed_[MODEL_DOF];
 unsigned int control_mask_[MODEL_DOF];
 odrive::ODriveSocketCan odrv;    
 
+DyrosBoltInitArgs g_init_args;
+
 
 bool initDyrosBoltArgs(const DyrosBoltInitArgs &args)
 {
@@ -246,6 +248,14 @@ void sendJointStatus()
     memcpy(&shm_msgs_->torqueActual[Q_START], &torque_[Q_START], sizeof(float) * PART_CAN_DOF);
 
     shm_msgs_->statusWriting--;
+
+    if (g_init_args.is_main)
+    {
+        shm_msgs_->triggerS1 = true;
+
+        cpu_relax();
+        // atomic_store(&shm_->triggerS1,1,memory_order_release);
+    }
 
 }
 

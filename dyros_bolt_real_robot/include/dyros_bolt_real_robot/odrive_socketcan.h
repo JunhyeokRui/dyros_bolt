@@ -162,7 +162,7 @@ void checkJointSafety();
 void checkJointStatus();
 
 //void initSharedMemory();
-void sendJointStatus();
+// void sendJointStatus();
 void getJointCommand();
 
 bool saveCommutationLog();
