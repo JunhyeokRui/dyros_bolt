@@ -118,9 +118,10 @@ void *StateManager::StateThread()
     // initializeJointMLP();
     initializeCustomMatrix();
     // loadJointVelNetwork("/home/dyros/joint_vel_net/");
-
+    std::cout << "!!Inside State Thread!!" << std::endl;
     while (true)
     {
+
         if (dc_.tc_shm_->shutdown)
             break;
         //////////////////////////////
@@ -819,7 +820,7 @@ void *StateManager::LoggerThread()
 void StateManager::SendCommand()
 {
     timespec t_u10;
-
+    std::cout << "!!Inside SM SendCommand!!" << std::endl;
     t_u10.tv_nsec = 10000;
     t_u10.tv_sec = 0;
     static double torque_command[MODEL_DOF];
@@ -1076,7 +1077,9 @@ void StateManager::SendCommand()
     }
 
     dc_.tc_shm_->cmd_lower = true;
-    cout << "torque_command input from state manager" << endl;
+    std::cout << "!!SE Command Lower!!" << std::endl;
+    std::cout << "dc_.tc_shm_->cmd_lower : " << dc_.tc_shm_->cmd_lower << std::endl;
+
     for (int i = 0; i < MODEL_DOF; i++)
             torque_command[i] = 1.0;
             std::cout << "state_manager" << std::endl;
