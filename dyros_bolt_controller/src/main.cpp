@@ -145,6 +145,7 @@ int main(int argc, char **argv)
             
             printf("threads[0] create failed\n");
         }
+        std::cout << "!!Thread Starter ON!!" << std::endl;
         if (pthread_create(&threads[1], &attrs[1], &DyrosBoltController::Thread1Starter, &tc_)){
             
             printf("threads[1] create failed\n");
