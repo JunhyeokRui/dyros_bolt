@@ -121,7 +121,7 @@ void *StateManager::StateThread()
     std::cout << "!!Inside State Thread!!" << std::endl;
     while (true)
     {
-        std::cout << "!!SM-1!!" << std::endl;
+        // std::cout << "!!SM-1!!" << std::endl;
         if (dc_.tc_shm_->shutdown)
             break;
         //////////////////////////////
@@ -137,7 +137,7 @@ void *StateManager::StateThread()
         //     if (dc_.tc_shm_->shutdown)
         //         break;
         // }
-        std::cout << "!!SM-2!!" << std::endl;
+        // std::cout << "!!SM-2!!" << std::endl;
         rd_.tp_state_ = std::chrono::steady_clock::now();
         auto t1 = rd_.tp_state_;
 
@@ -152,7 +152,7 @@ void *StateManager::StateThread()
                 }
             }
         }
-        std::cout << "!!SM-3!!" << std::endl;
+        // std::cout << "!!SM-3!!" << std::endl;
         dc_.tc_shm_->triggerS1 = false;
         cycle_count_++;
         dc_.stm_cnt++;
@@ -164,7 +164,7 @@ void *StateManager::StateThread()
         GetCustomSimData(); 
         
         InitYaw();
-        std::cout << "!!SM-4!!" << std::endl;
+        // std::cout << "!!SM-4!!" << std::endl;
         auto d1 = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - t1).count();
 
         auto t2 = chrono::steady_clock::now();
@@ -177,14 +177,14 @@ void *StateManager::StateThread()
 
         auto t3 = chrono::steady_clock::now();
         UpdateKinematics_local(model_local_, link_local_, q_virtual_local_, q_dot_virtual_local_, q_ddot_virtual_local_);
-        std::cout << "!!SM-5!!" << std::endl;
+        // std::cout << "!!SM-5!!" << std::endl;
         GetSensorData();
-        std::cout << "!!SM-6!!" << std::endl;
+        // std::cout << "!!SM-6!!" << std::endl;
         auto d3 = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - t3).count();
 
         auto t4 = chrono::steady_clock::now();
         StateEstimate();
-        std::cout << "!!SM-7!!" << std::endl;
+        // std::cout << "!!SM-7!!" << std::endl;
         // global kinematics update : 127 us //w/o march native 125 us
         UpdateKinematics(model_global_, link_, q_virtual_, q_dot_virtual_, q_ddot_virtual_);
 
@@ -196,7 +196,7 @@ void *StateManager::StateThread()
         static int rcv_count = 0;
 
         static const int ignore_count = 20; // 10ms
-        std::cout << "!!SM-8!!" << std::endl;
+        // std::cout << "!!SM-8!!" << std::endl;
         if (grav_sig != dc_.tc_shm_->grav_signal)
         {
             if (rcv_tcnt > rcv_count + ignore_count)
@@ -227,7 +227,7 @@ void *StateManager::StateThread()
 
             rcv_count = rcv_tcnt;
         }
-        std::cout << "!!SM-9!!" << std::endl;
+        // std::cout << "!!SM-9!!" << std::endl;
         grav_sig = dc_.tc_shm_->grav_signal;
         pos_sig = dc_.tc_shm_->pos_signal;
 
@@ -249,7 +249,7 @@ void *StateManager::StateThread()
         dc_.tc_shm_->stloopCount.store(dc_.stm_cnt);
 
         SendCommand();
-        std::cout << "!!SM-10!!" << std::endl;
+        // std::cout << "!!SM-10!!" << std::endl;
         auto d4 = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - t4).count();
         rd_gl_.state_ctime_total_ += (d1 + d2 + d3 + d4);
         rd_gl_.state_ctime_avg_ = rd_gl_.state_ctime_total_ / dc_.stm_cnt;
@@ -818,7 +818,7 @@ void *StateManager::LoggerThread()
 void StateManager::SendCommand()
 {
     timespec t_u10;
-    std::cout << "!!Inside SM SendCommand!!" << std::endl;
+    // std::cout << "!!Inside SM SendCommand!!" << std::endl;
     t_u10.tv_nsec = 10000;
     t_u10.tv_sec = 0;
     static double torque_command[MODEL_DOF];
@@ -1075,12 +1075,12 @@ void StateManager::SendCommand()
     }
 
     dc_.tc_shm_->cmd_lower = true;
-    std::cout << "!!SE Command Lower!!" << std::endl;
-    std::cout << "dc_.tc_shm_->cmd_lower : " << dc_.tc_shm_->cmd_lower << std::endl;
+    // std::cout << "!!SM Command Lower!!" << std::endl;
 
     for (int i = 0; i < MODEL_DOF; i++)
             torque_command[i] = 1.0;
-            std::cout << "state_manager" << std::endl;
+
+    //ANCHOR - torque from dyros_bolt_controller -> state_manager
     
     std::copy(torque_command, torque_command + 6, dc_.tc_shm_->torqueCommand);
     

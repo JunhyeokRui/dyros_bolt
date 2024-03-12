@@ -434,7 +434,6 @@ void DyrosBoltController::SendCommand(Eigen::VectorQd torque_command)
     dc_.t_c_ = true;
     dc_.control_command_count++;
     std::copy(torque_command.data(), torque_command.data() + MODEL_DOF, dc_.torque_command);
-    std::cout << "dyros_bolt_controller" << std::endl;
 
 //rui - for debug start
         // std::cout << "torque_command" << std::endl;
