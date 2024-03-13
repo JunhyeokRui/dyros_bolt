@@ -111,6 +111,7 @@ typedef struct SHMmsgs
     volatile bool controlModeUpper;
     volatile bool initializeModeLower;
     volatile bool initializeModeUpper;
+    volatile bool initializeDyrosBolt;
     volatile bool safety_disable;
     volatile bool lower_disabled;
     volatile bool grav_signal;
@@ -158,6 +159,7 @@ typedef struct SHMmsgs
     bool low_init_signal = false;
     bool waist_init_signal = false;
     bool upper_init_signal = false;
+    bool bolt_init_signal = false;
 
     volatile bool safety_reset_lower_signal;
     volatile bool safety_reset_upper_signal;

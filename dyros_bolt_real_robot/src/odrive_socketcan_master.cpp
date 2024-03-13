@@ -20,6 +20,14 @@ bool extencoder_init_flag_;
 unsigned int joint_id_[MODEL_DOF];
 unsigned int joint_id_inversed_[MODEL_DOF];
 unsigned int control_mask_[MODEL_DOF];
+
+volatile bool de_zp_switch;
+volatile bool de_zp;
+volatile bool de_zp_sequence;
+bool fz_check = false;
+bool check_commutation = true;
+bool check_commutation_first = true;
+
 odrive::ODriveSocketCan odrv;    
 
 DyrosBoltInitArgs g_init_args;
@@ -69,82 +77,465 @@ void *ethercatThread1(void *data)
 {
     DyrosBoltInitArgs *init_args = (DyrosBoltInitArgs *)data;
 
-    // while (!DyrosBoltInitialization)
-    // {
-    //     std::cout << " ODRV : START Initialization Mode" << std::endl;
+    fprintf(stdout, "%sODRV : START Initialization Mode %s\n", cyellow, creset);
+    while(shm_msgs_->initializeDyrosBolt == false)
+    {
+        
+    }
 
-    //     int16_t requestState = msg->data;
-    
-    //     switch (requestState) {
-    //         case 1:
-    //             odrv.disengage();
-    //             break;
-    //         case 2:
-    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-    //                 odrv.requestODriveCmd(i, odrive::ODriveCommandId::ESTOP_MESSAGE);
-    //             }
-    //             break;    
-    //         case 4:
-    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-    //                 odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
-    //             }
-    //             break;
-    //         case 7:
-    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-    //                 odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
-    //             }
-    //             break;
-    //         case 8:
-    //             odrv.engage();
-    //             // for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
-    //             // {
-    //             //     // odrv.setInputTorque(i, 0);
-    //             //     // odrv.setInputTorque(i+3,0);
-    //             // }
-    //             break;
-    //         case 16:
-    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-    //                 odrv.requestODriveCmd(i, odrive::ODriveCommandId::REBOOT_ODRIVE);
-    //             }
-    //             break;
-    //         case 19:
-    //             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-    //                 odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
-    //             }
-    //             break;    
-    //     }
-    //     if (DyrosBoltInitialization){
-    //         break;
-    //     }
-    //     std::cout << " ODRV : Initialization Mode Failed. Retrying..." << std::endl;
-    // }
+    switch (requestState) {
+        case 1:
+            odrv.disengage();
+            break;
+        case 2:
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                odrv.requestODriveCmd(i, odrive::ODriveCommandId::ESTOP_MESSAGE);
+            }
+            break;    
+        case 4:
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
+            }
+            break;
+        case 7:
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
+            }
+            break;
+        case 8:
+            odrv.engage();
+            // for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
+            // {
+            //     // odrv.setInputTorque(i, 0);
+            //     // odrv.setInputTorque(i+3,0);
+            // }
+            break;
+        case 16:
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                odrv.requestODriveCmd(i, odrive::ODriveCommandId::REBOOT_ODRIVE);
+            }
+            break;
+        case 19:
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
+            }
+            break;    
+    }
+    shm_msgs_->initializeDyrosBolt = true;
+
     
     if (shm_msgs_->shutdown)
         printf("Shutdown Command Before Start\n");
 
     while (!shm_msgs_->shutdown)
     {
-        std::cout << "test2" << std::endl;
         if (!shm_msgs_->shutdown)
             printf(" REALROBOT : Control Mode Start ... ");
+        
+        readDevice();
 
-        while (!shm_msgs_->shutdown)
+//rui - /*get motordrive state*/
+        // ts.tv_nsec += init_args->period_ns + toff;
+        // if (ts.tv_nsec >= SEC_IN_NSEC)
+        // {
+        //     ts.tv_sec++;
+        //     ts.tv_nsec -= SEC_IN_NSEC;
+        // }
+        // ec_send_processdata();
+        // clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
+
+        // cycle_count++;
+
+        // wkc = ec_receive_processdata(EC_PACKET_TIMEOUT);
+
+        // control_time_real_ = cycle_count * init_args->period_ns / 1000000000.0;
+
+        // for (int i = 0; i < ec_slavecount; i++)
+        // {
+        //     // printf("%d\t",rxPDO[i]->statusWord);
+
+        //     elmost[i].state = getElmoState(rxPDO[i]->statusWord);
+
+        //     if (elmost[i].state != elmost[i].state_before)
+        //     {
+        //         state_elmo_[JointMap2[START_N + i]] = elmost[i].state;
+
+        //         if (elmost[i].first_check)
+        //         {
+        //             if (elmost[i].state == ELMO_NOTFAULT)
+        //             {
+        //                 elmost[i].commutation_required = true;
+        //             }
+        //             else if (elmost[i].state == ELMO_FAULT)
+        //             {
+        //                 // printf("slave : " << i << " commutation check complete at first\n");
+        //                 elmost[i].commutation_not_required = true;
+        //             }
+        //             else if (elmost[i].state == ELMO_OPERATION_ENABLE)
+        //             {
+        //                 // printf("slave : " << i << " commutation check complete with operation enable\n");
+        //                 elmost[i].commutation_not_required = true;
+        //                 elmost[i].commutation_ok = true;
+        //             }
+        //             else
+        //             {
+        //                 // printf("first missing : slave : " << i << " state : " << elmost[i].state << '\n';
+        //             }
+        //             elmost[i].first_check = false;
+        //         }
+        //         else
+        //         {
+        //             if (elmost[i].state == ELMO_OPERATION_ENABLE)
+        //             {
+        //                 // printf("slave : %d commutation check complete with operation enable 2\n",i);
+        //                 elmost[i].commutation_ok = true;
+        //                 elmost[i].commutation_required = false;
+        //             }
+        //         }
+        //         query_check_state = true;
+        //     }
+        //     elmost[i].state_before = elmost[i].state;
+        // }
+        
+//rui - /*check commutation*/
+        // if (check_commutation)
+        // {
+        //     if (check_commutation_first)
+        //     {
+        //         if (init_args->ecat_device == 0)
+        //         {
+        //             printf("Commutation Status : \n");
+        //             for (int i = 0; i < ec_slavecount; i++)
+        //                 printf("--");
+        //             printf("\n");
+        //             for (int i = 0; i < ec_slavecount; i++)
+        //                 printf("%2d", (i - i % 10) / 10);
+        //             printf("\n");
+        //             for (int i = 0; i < ec_slavecount; i++)
+        //                 printf("%2d", i % 10);
+        //             printf("\n");
+        //             printf("\n");
+        //             printf("\n");
+        //         }
+        //         check_commutation_first = false;
+        //     }
+        //     if (query_check_state)
+        //     {
+        //         if (init_args->ecat_device == 0)
+        //         {
+        //             printf("\x1b[A\x1b[A\33[2K\r");
+        //             for (int i = 0; i < ec_slavecount; i++)
+        //             {
+        //                 if (elmost[i].state == ELMO_OPERATION_ENABLE)
+        //                 {
+        //                     printf("%s%2d%s", cgreen, elmost[i].state, creset);
+        //                 }
+        //                 else
+        //                 {
+        //                     printf("%2d", elmost[i].state);
+        //                 }
+        //             }
+        //             printf("\n");
+        //             for (int i = 0; i < ec_slavecount; i++)
+        //                 printf("--");
+        //             printf("\n");
+        //             fflush(stdout);
+        //         }
+        //         query_check_state = false;
+        //     }
+        // }
+
+        // bool waitop = true;
+        // for (int i = 0; i < ec_slavecount; i++)
+        //     waitop = waitop && elmost[i].commutation_ok;
+
+        // if (waitop)
+        // {
+        //     static bool pub_once = true;
+
+        //     if (pub_once)
+        //     {
+
+        //         long commutation_time = getTimeDiff(ts_start);
+
+        //         int commutation_min_time = 1000;
+
+        //         if (commutation_time / 1e6 < commutation_min_time)
+        //         {
+
+        //             de_commutation_done = true;
+        //             check_commutation = false;
+        //             if (init_args->verbose)
+        //                 printf("ELMO %d : Load ZP ... \n", init_args->ecat_device);
+        //         }
+        //         else
+        //         {
+
+        //             printf("ELMO %d : All slaves Operational in %f ms, > %d\n", init_args->ecat_device, commutation_time / 1e6, commutation_min_time);
+
+        //             if (saveCommutationLog())
+        //             {
+        //                 if (init_args->verbose)
+        //                     printf("\nELMO %d : Commutation is done, logging success\n", init_args->ecat_device);
+        //             }
+        //             else
+        //             {
+        //                 printf("\nELMO %d : Commutation is done, logging failed\n", init_args->ecat_device);
+        //             }
+        //             de_commutation_done = true;
+        //             check_commutation = false;
+        //         }
+
+        //         pub_once = false;
+        //     }
+        // }
+
+        // if (de_commutation_done)
+        // {
+        //     static bool pub_once = true;
+        //     if (pub_once)
+        //     {
+
+        //         if (loadZeroPoint())
+        //         {
+                    
+        //             break;
+        //         }
+        //         else
+        //         {
+        //             printf("ELMO %d : ZeroPoint load failed. Ready to Search Zero Point \n", init_args->ecat_device);
+        //             de_zp_sequence = true;
+        //         }
+        //         pub_once = false;
+        //     }
+        // }
+
+        // if (shm_msgs_->force_load_saved_signal)
+        // {
+        //     loadZeroPoint(true);
+        //     printf("ELMO 1 : force load ZP\n");
+        //     break;
+        // }
+
+        // bool waitcm = true;
+        // for (int i = 0; i < ec_slavecount; i++)
+        //     waitcm = waitcm && elmost[i].commutation_not_required;
+
+        // if (waitcm)
+        // {
+        //     if (wait_kill_switch)
+        //     {
+        //         if (init_args->verbose)
+        //             printf("ELMO %d : Commutation state OK\n", init_args->ecat_device);
+        //         // loadCommutationLog();
+        //         loadZeroPoint();
+        //         wait_kill_switch = false;
+        //         check_commutation = false;
+        //     }
+        //     if (wait_cnt == 200)
+        //     {
+        //         printf("ELMO %d : slaves status are not OP! maybe kill switch is on?\n", init_args->ecat_device);
+        //     }
+
+        //     wait_cnt++;
+        // }
+        // else
+        // {
+        //     int total_commutation_cnt = 0;
+        //     for (int i = 0; i < ec_slavecount; i++)
+        //     {
+        //         if (elmost[i].commutation_required)
+        //         {
+        //             total_commutation_cnt++;
+        //             if (total_commutation_cnt < 4)
+        //                 controlWordGenerate(rxPDO[i]->statusWord, txPDO[i]->controlWord);
+        //             txPDO[i]->maxTorque = (uint16)400; // originaly 1000
+        //         }
+        //     }
+        // }
+
+//rui - /*homming*/
+        // if (wkc >= expectedWKC)
+        // {
+        //     for (int slave = 1; slave <= ec_slavecount; slave++)
+        //     {
+        //         if (!elmost[slave - 1].commutation_required)
+        //         {
+        //             if (controlWordGenerate(rxPDO[slave - 1]->statusWord, txPDO[slave - 1]->controlWord))
+        //             {
+        //                 reachedInitial[slave - 1] = true;
+        //             }
+        //             if (reachedInitial[slave - 1])
+        //             {
+        //                 q_elmo_[START_N + slave - 1] = rxPDO[slave - 1]->positionActualValue * CNT2RAD[START_N + slave - 1] * elmo_axis_direction[START_N + slave - 1]; // - q_zero_elmo_[START_N + slave - 1];
+
+        //                 if (START_N + slave - 1 == R_HipYaw_Joint)
+        //                 {
+        //                     grav_signal = (((uint32_t)ec_slave[slave].inputs[6]) & ((uint32_t)1));
+        //                     pos_signal = (((uint32_t)ec_slave[slave].inputs[6]) & ((uint32_t)2));
+        //                 }
+
+        //                 hommingElmo[START_N + slave - 1] =
+        //                     (((uint32_t)ec_slave[slave].inputs[6]) & ((uint32_t)1));
+        //                 q_dot_elmo_[START_N + slave - 1] =
+        //                     (((int32_t)ec_slave[slave].inputs[10]) +
+        //                      ((int32_t)ec_slave[slave].inputs[11] << 8) +
+        //                      ((int32_t)ec_slave[slave].inputs[12] << 16) +
+        //                      ((int32_t)ec_slave[slave].inputs[13] << 24)) *
+        //                     CNT2RAD[START_N + slave - 1] * elmo_axis_direction[START_N + slave - 1];
+        //                 torque_elmo_[START_N + slave - 1] =
+        //                     (int16_t)(((int16_t)ec_slave[slave].inputs[14]) +
+        //                               ((int16_t)ec_slave[slave].inputs[15] << 8));
+        //                 q_ext_elmo_[START_N + slave - 1] =
+        //                     (((int32_t)ec_slave[slave].inputs[16]) +
+        //                      ((int32_t)ec_slave[slave].inputs[17] << 8) +
+        //                      ((int32_t)ec_slave[slave].inputs[18] << 16) +
+        //                      ((int32_t)ec_slave[slave].inputs[19] << 24) - q_ext_mod_elmo_[START_N + slave - 1]) *
+        //                     EXTCNT2RAD[START_N + slave - 1] * elmo_ext_axis_direction[START_N + slave - 1];
+
+        //                 if (q_ext_elmo_[START_N + slave - 1] > 3.141592)
+        //                 {
+        //                     q_ext_elmo_[START_N + slave - 1] -= 3.141592 * 2;
+        //                 }
+        //                 else if (q_ext_elmo_[START_N + slave - 1] < -3.141592)
+        //                 {
+        //                     q_ext_elmo_[START_N + slave - 1] += 3.141592 * 2;
+        //                 }
+
+        //                 if (START_N + slave == 1 || START_N + slave == 2 || START_N + slave == 7 || START_N + slave == 19 || START_N + slave == 20 || START_N + slave == 16)
+        //                 {
+        //                     hommingElmo[START_N + slave - 1] = !hommingElmo[START_N + slave - 1];
+        //                 }
+        //                 txPDO[slave - 1]->maxTorque = (uint16)500; // originaly 1000
+        //             }
+        //         }
+        //     }
+        // }
+
+        // for (int i = 0; i < ec_slavecount; i++)
+        // {
+        //     q_[JointMap2[START_N + i]] = q_elmo_[START_N + i];
+        //     q_dot_[JointMap2[START_N + i]] = q_dot_elmo_[START_N + i];
+        //     torque_[JointMap2[START_N + i]] = torque_elmo_[START_N + i];
+
+        //     if (g_init_args.ecat_device == 1)
+        //         q_ext_[JointMap2[START_N + i]] = q_desired_elmo_[START_N + i];
+        //     else
+        //         q_ext_[JointMap2[START_N + i]] = q_ext_elmo_[START_N + i];
+
+        // }
+
+        if (shm_msgs_->bolt_init_signal)
         {
-            std::cout << "test3" << std::endl;
-            readDevice();
-            std::cout << "test3-1" << std::endl;
-            sendJointStatus();
-            std::cout << "test3-2" << std::endl;
-            update();
-            std::cout << "test3-3" << std::endl;
-            getJointCommand();
-            std::cout << "test3-4" << std::endl;
-            // writeDevice();
+            de_zp_switch = true;
+            shm_msgs_->bolt_init_signal = false;
         }
 
 
+        sendJointStatus();
+
+        // if (de_zp_sequence)
+        // {
+        //     static bool zp_upper = false;
+        //     static bool zp_lower = false;
+
+        //     if (de_zp_switch)
+        //     {
+        //         printf("ODRV %d : Starting zp\n", init_args->ecat_device);
+                
+        //         elmofz[R_Shoulder3_Joint].findZeroSequence = 7;
+        //         elmofz[R_Shoulder3_Joint].initTime = control_time_real_;
+        //         elmofz[L_Shoulder3_Joint].findZeroSequence = 7;
+        //         elmofz[L_Shoulder3_Joint].initTime = control_time_real_;
+
+        //         for (int i = 0; i < ec_slavecount; i++)
+        //             hommingElmo_before[START_N + i] = hommingElmo[START_N + i];
+
+        //         de_zp = true;
+        //         de_zp_switch = false;
+        //     }
+
+        //     if (de_zp)
+        //     {
+                
+        //         for (int i = 0; i < 18; i++)
+        //         {
+        //             findZeroPoint(fz_group1[i], control_time_real_);
+        //         }
+                
+        //         for (int i = 0; i < ec_slavecount; i++)
+        //             hommingElmo_before[START_N + i] = hommingElmo[START_N + i];
+        //     }
+            
+        //     fz_check = true;
+        //     for (int i = 0; i < 18; i++)
+        //     {
+        //         fz_check = fz_check && (elmofz[fz_group1[i]].result == ElmoHommingStatus::SUCCESS);
+        //     }
+
+        //     static bool low_verbose = true;
+        //     if (low_verbose && fz_group3_check)
+        //     {
+        //         printf("ELMO %d : lowerbody zp done \n", init_args->ecat_device);
+        //         low_verbose = false;
+        //     }
+
+        // if (fz_check)
+        //     {
+        //         if (saveZeroPoint())
+        //         {
+        //             // printf("ELMO : zeropoint searching complete, saved \n");
+        //             de_zp_sequence = false;
+        //             break;
+        //         }
+        //         else
+        //         {
+        //             // printf("ELMO : zeropoint searching complete, save failed\n");
+        //             de_zp_sequence = false;
+        //             break;
+        //         }
+        //     }
+        // }
+
+
+//rui - /*get joint torque*/
+        getJointCommand();
+        
+        
+        // writeDevice();
+//rui - /*send command*/
+        // for (int i = 0; i < ec_slavecount; i++)
+        // {
+
+        //     if (ElmoMode[START_N + i] == EM_POSITION)
+        //     {
+        //         txPDO[i]->modeOfOperation = EtherCAT_Elmo::CyclicSynchronousPositionmode;
+        //         txPDO[i]->targetPosition = (int)(elmo_axis_direction[START_N + i] * RAD2CNT[START_N + i] * q_desired_elmo_[START_N + i]);
+
+        //         txPDO[i]->maxTorque = 500;
+
+        //     }
+        //     else if (ElmoMode[START_N + i] == EM_TORQUE)
+        //     {
+        //         txPDO[i]->modeOfOperation = EtherCAT_Elmo::CyclicSynchronousTorquemode;
+
+        //         txPDO[i]->targetTorque = (int)(torque_desired_elmo_[START_N + i] * NM2CNT[START_N + i] * elmo_axis_direction[START_N + i]);
+        //     }
+        //     else if (ElmoMode[START_N + i] == EM_COMMUTATION)
+        //     {
+        //         txPDO[i]->modeOfOperation = EtherCAT_Elmo::CyclicSynchronousTorquemode;
+        //         txPDO[i]->targetTorque = (int)0;
+        //     }
+        //     else
+        //     {
+        //         txPDO[i]->modeOfOperation = EtherCAT_Elmo::CyclicSynchronousTorquemode;
+        //         txPDO[i]->targetTorque = (int)0;
+        //     }
+        // }
+        
+
+
     }
-    std::cout << "test4" << std::endl;
     return (void *)NULL;
 
 }
@@ -173,17 +564,17 @@ void readDevice(){
     imu_angular_velocity[1] = shm_msgs_->vel_virtual[1];
     imu_angular_velocity[2] = shm_msgs_->vel_virtual[2];
 
-    std::cout << "q_" << std::endl;
-    for (size_t i = 0; i < 6; i++)
-    {
-        std::cout << q_[i] << std::endl;
+    // std::cout << "q_" << std::endl;
+    // for (size_t i = 0; i < 6; i++)
+    // {
+    //     std::cout << q_[i] << std::endl;
         
-    }
-    std::cout << "q_dot_" << std::endl;
-    for (size_t i = 0; i < 6; i++)
-    {
-        std::cout << q_dot_[i] << std::endl;
-    }
+    // }
+    // std::cout << "q_dot_" << std::endl;
+    // for (size_t i = 0; i < 6; i++)
+    // {
+    //     std::cout << q_dot_[i] << std::endl;
+    // }
 
 }
 
@@ -258,6 +649,7 @@ void sendJointStatus()
     }
 
 }
+
 
 void getJointCommand()
 {

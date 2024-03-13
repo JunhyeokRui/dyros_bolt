@@ -2231,6 +2231,19 @@ void StateManager::PublishData()
     else
     {
         syspub_msg.data[0] = dc_.tc_shm_->imu_state;
+        if (dc_.tc_shm_->initializeDyrosBolt && !dc_.tc_shm_->controlModeUpper)
+        {
+            syspub_msg.data[1] = 1;
+        }
+        else if (dc_.tc_shm_->controlModeUpper && dc_.tc_shm_->initializeDyrosBolt)
+        {
+            syspub_msg.data[1] = 2;
+        }
+        else if (!dc_.tc_shm_->controlModeUpper && !dc_.tc_shm_->initializeDyrosBolt)
+        {
+            syspub_msg.data[1] = 0;
+        }
+
         if (dc_.tc_shm_->initializeModeUpper && !dc_.tc_shm_->controlModeUpper)
         {
             syspub_msg.data[1] = 1;
@@ -2457,6 +2470,11 @@ void StateManager::GuiCommandCallback(const std_msgs::StringConstPtr &msg)
     {
         StatusPub("%f Initialize upper", control_time_);
         dc_.tc_shm_->upper_init_signal = true;
+    }
+    else if (msg->data == "ecatinit")
+    {
+        StatusPub("%f Initialize Dyros Bolt", control_time_);
+        dc_.tc_shm_->bolt_init_signal = true;
     }
     else if (msg->data == "disablelower")
     {
