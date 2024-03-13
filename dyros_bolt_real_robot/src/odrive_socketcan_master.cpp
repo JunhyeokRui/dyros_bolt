@@ -262,7 +262,7 @@ void sendJointStatus()
 void getJointCommand()
 {
     timespec ts_us1;
-
+    std::cout << "testjc" << std::endl;
     ts_us1.tv_sec = 0;
     ts_us1.tv_nsec = 1000;
     cpu_relax();
