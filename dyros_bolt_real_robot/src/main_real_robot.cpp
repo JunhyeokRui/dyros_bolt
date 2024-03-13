@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     
     DyrosBoltInitArgs init_args;
     
-    int max_jnum = 6;
+    int max_jnum = 0;
     init_args.q_start_ = max_jnum;
     init_args.can_slave_num = 6;
     init_args.is_main = true;

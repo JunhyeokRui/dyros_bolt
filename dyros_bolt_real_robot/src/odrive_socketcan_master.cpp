@@ -261,14 +261,11 @@ void sendJointStatus()
 
 void getJointCommand()
 {
-    std::cout << "test3-3-1" << std::endl;
     timespec ts_us1;
 
     ts_us1.tv_sec = 0;
     ts_us1.tv_nsec = 1000;
-    std::cout << "test3-3-2" << std::endl;
     cpu_relax();
-    std::cout << "test3-3-3" << std::endl;
     // static int stloop;
     // static bool stloop_check;
     // stloop_check = false;
@@ -283,20 +280,15 @@ void getJointCommand()
     
         while (shm_msgs_->cmd_lower)
         {
-            std::cout << "test3-3-4" << std::endl;
             clock_nanosleep(CLOCK_MONOTONIC, 0, &ts_us1, NULL);
         };
         shm_msgs_->cmd_lower = true;
-        std::cout << "test3-3-5" << std::endl;
-        std::cout << "Q_START" << std::endl;
-        std::cout << Q_START << std::endl;
-        // memcpy(&torque_desired_[Q_START], &shm_msgs_->torqueCommand[Q_START], sizeof(float) * PART_CAN_DOF);
-        // for(int i = Q_START; i < Q_START + PART_CAN_DOF; i++) {
-        //     std::cout << "torque_desired_[" << i << "] = " << torque_desired_[i] << std::endl;
-        // }
-        std::cout << "test3-3-6" << std::endl;
+        //ANCHOR - torque comming from
+        memcpy(&torque_desired_[Q_START], &shm_msgs_->torqueCommand[Q_START], sizeof(float) * PART_CAN_DOF);
+        for(int i = Q_START; i < Q_START + PART_CAN_DOF; i++) {
+            std::cout << "torque_desired_[" << i << "] = " << torque_desired_[i] << std::endl;
+        }
         shm_msgs_->cmd_lower = false;
-        std::cout << "test3-3-7" << std::endl;
 
 
 
