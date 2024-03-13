@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     ret = pthread_create(&thread1, &attr, ethercatThread1, &init_args);
     if (ret)
     {
-        printf("create pthread 1 failed\n", ret);
+        printf("create pthread 1 failed with error: %d\n", ret);
         return ret;
     }
 
