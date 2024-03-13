@@ -288,7 +288,8 @@ void getJointCommand()
         };
         shm_msgs_->cmd_lower = true;
         std::cout << "test3-3-5" << std::endl;
-        
+        std::cout << "Q_START" << std::endl;
+        std::cout << Q_START << std::endl;
         // memcpy(&torque_desired_[Q_START], &shm_msgs_->torqueCommand[Q_START], sizeof(float) * PART_CAN_DOF);
         // for(int i = Q_START; i < Q_START + PART_CAN_DOF; i++) {
         //     std::cout << "torque_desired_[" << i << "] = " << torque_desired_[i] << std::endl;
