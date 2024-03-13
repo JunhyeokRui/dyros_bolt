@@ -30,7 +30,6 @@ int main(int argc, char **argv)
     int ret;
 
     initDyrosBoltArgs(init_args);
-    
     bool init_result = initDyrosBoltSystem(init_args);
     if (!init_result)
     {
@@ -80,7 +79,7 @@ int main(int argc, char **argv)
     ret = pthread_create(&thread1, &attr, ethercatThread1, &init_args);
     if (ret)
     {
-        printf("create pthread 1 failed\n");
+        printf("create pthread 1 failed\n", ret);
         return ret;
     }
 
