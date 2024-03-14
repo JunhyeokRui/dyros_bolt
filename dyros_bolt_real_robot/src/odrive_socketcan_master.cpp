@@ -129,7 +129,7 @@ void *ethercatThread1(void *data)
     {
         
         if (!shm_msgs_->shutdown)
-            printf(" REALROBOT : Control Mode Start ... ");
+            printf(" REALROBOT : Control Mode Start ... \n");
         
         readDevice();
         if(shm_msgs_->odrvTorqueOn){
