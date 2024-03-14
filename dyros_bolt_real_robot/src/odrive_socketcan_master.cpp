@@ -77,64 +77,130 @@ void *ethercatThread1(void *data)
 {
     DyrosBoltInitArgs *init_args = (DyrosBoltInitArgs *)data;
 
-    fprintf(stdout, "%sODRV : START Initialization Mode %s\n", cyellow, creset);
-    while(shm_msgs_->initializeDyrosBolt == false)
-    {
+    printf("ODRV : START Initialization Mode\n");
+    // while(shm_msgs_->initializeDyrosBolt == false)
+    // {
         
-    }
+    // }
 
-    switch (requestState) {
-        case 1:
-            odrv.disengage();
-            break;
-        case 2:
-            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                odrv.requestODriveCmd(i, odrive::ODriveCommandId::ESTOP_MESSAGE);
-            }
-            break;    
-        case 4:
-            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
-            }
-            break;
-        case 7:
-            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
-            }
-            break;
-        case 8:
-            odrv.engage();
-            // for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
-            // {
-            //     // odrv.setInputTorque(i, 0);
-            //     // odrv.setInputTorque(i+3,0);
-            // }
-            break;
-        case 16:
-            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                odrv.requestODriveCmd(i, odrive::ODriveCommandId::REBOOT_ODRIVE);
-            }
-            break;
-        case 19:
-            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
-            }
-            break;    
-    }
-    shm_msgs_->initializeDyrosBolt = true;
+    // switch (requestState) {
+    //     case 1:
+    //         odrv.disengage();
+    //         break;
+    //     case 2:
+    //         for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //             odrv.requestODriveCmd(i, odrive::ODriveCommandId::ESTOP_MESSAGE);
+    //         }
+    //         break;    
+    //     case 4:
+    //         for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //             odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
+    //         }
+    //         break;
+    //     case 7:
+    //         for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //             odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
+    //         }
+    //         break;
+    //     case 8:
+    //         odrv.engage();
+    //         // for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
+    //         // {
+    //         //     // odrv.setInputTorque(i, 0);
+    //         //     // odrv.setInputTorque(i+3,0);
+    //         // }
+    //         break;
+    //     case 16:
+    //         for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //             odrv.requestODriveCmd(i, odrive::ODriveCommandId::REBOOT_ODRIVE);
+    //         }
+    //         break;
+    //     case 19:
+    //         for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    //             odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
+    //         }
+    //         break;    
+    // }
 
-    
     if (shm_msgs_->shutdown)
         printf("Shutdown Command Before Start\n");
 
     while (!shm_msgs_->shutdown)
     {
+        
         if (!shm_msgs_->shutdown)
             printf(" REALROBOT : Control Mode Start ... ");
         
         readDevice();
+        if(shm_msgs_->odrvTorqueOn){
+            odrv.engage();
+            printf("ODRV : TORQUE ON ..\n");
+            shm_msgs_->odrvTorqueOn = false;
+        }
+        if(shm_msgs_->odrvTorqueOff){
+            odrv.disengage();
+            printf("ODRV : TORQUE OFF ..\n");
+            shm_msgs_->odrvTorqueOff = false;
+        }
 
 //rui - /*get motordrive state*/
+        //ANCHOR - motor calibration
+        if(shm_msgs_->motorCalibSwitch){
+            printf("Motor Calib Pressed\n");
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                    odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
+            }
+
+            for(int id : odrv.axis_can_ids_list){
+                if(odrv.axis_current_state[id] != 0 || odrv.axis_error[id] == 0){
+                    printf("Motor Calibration in Progress ...\n");
+                }
+            }
+            for(int id : odrv.axis_can_ids_list){
+                if(odrv.axis_current_state[id] == 0 && odrv.axis_error[id] == 0){
+                    printf("Motor Calibration Done\n");
+                    shm_msgs_->motorCalibSwitch = false;
+                }
+            }
+            
+        }
+
+        //ANCHOR - encoder calibration
+        if (shm_msgs_->encoderCalibSwitch)
+        {
+            printf("Encoder Calib Pressed\n");
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
+            }
+            
+            for(int id : odrv.axis_can_ids_list){
+                if(odrv.axis_current_state[id] != 0 || odrv.axis_error[id] == 0){
+                    printf("Encoder Calibration in Progress ...\n");    
+                }
+            }
+            for(int id : odrv.axis_can_ids_list){
+                if(odrv.axis_current_state[id] == 0 && odrv.axis_error[id] == 0){
+                    printf("Encoder Calibration Done \n");    
+                    shm_msgs_->encoderCalibSwitch = false;
+                }
+            }
+        }
+
+        // for(int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+        //     if(odrv.axis_current_state[i] != 8) {
+        //         return false;
+        //     }
+        // }
+
+        if (shm_msgs_->encoderResetSwitch)
+        {
+            printf("Encoder Reset Pressed\n");
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
+            }
+            shm_msgs_->encoderResetSwitch = false;
+        }
+
         // ts.tv_nsec += init_args->period_ns + toff;
         // if (ts.tv_nsec >= SEC_IN_NSEC)
         // {
@@ -198,6 +264,8 @@ void *ethercatThread1(void *data)
         // }
         
 //rui - /*check commutation*/
+
+
         // if (check_commutation)
         // {
         //     if (check_commutation_first)
@@ -504,6 +572,14 @@ void *ethercatThread1(void *data)
         
         // writeDevice();
 //rui - /*send command*/
+        // if(odrv.areMotorsReady()){
+        //     for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
+        //     {
+        //         odrv.setInputTorque(i, double(-desired_torque_(i)/k_tau[i]));
+        //         odrv.setInputTorque(i+3, double(desired_torque_(i+4)/k_tau[i+3]));
+        //     }
+        // }
+
         // for (int i = 0; i < ec_slavecount; i++)
         // {
 
