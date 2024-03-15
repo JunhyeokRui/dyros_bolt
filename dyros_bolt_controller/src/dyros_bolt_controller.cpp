@@ -230,7 +230,7 @@ void *DyrosBoltController::Thread1()
             // std::cout << "DBC : 4" << std::endl;
             static std::chrono::steady_clock::time_point t_c_ = std::chrono::steady_clock::now();
             std::cout << "rd_.torque_desired" << std::endl;
-            for (int i = 0; i < 20; ++i) {
+            for (int i = 0; i < 33; ++i) {
                 const auto& element = rd_.torque_desired[i];
                 std::cout << element << " ";
             }

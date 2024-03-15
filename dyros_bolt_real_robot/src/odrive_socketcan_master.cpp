@@ -776,8 +776,10 @@ void getJointCommand()
         //ANCHOR - torque comming from
         memcpy(&torque_desired_[Q_START], &shm_msgs_->torqueCommand[Q_START], sizeof(float) * PART_CAN_DOF);
         for(int i = Q_START; i < Q_START + PART_CAN_DOF; i++) {
-            std::cout << "torque_desired_[" << i << "] = " << torque_desired_[i] << std::endl;
+            std::cout << "torque_desired_[" << i << "] = " << torque_desired_[i] << ", ";
         }
+        std::cout << std::endl;
+        
         shm_msgs_->cmd_lower = false;
 
 
