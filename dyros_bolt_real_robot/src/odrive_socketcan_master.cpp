@@ -29,6 +29,7 @@ bool check_commutation = true;
 bool check_commutation_first = true;
 bool motorCalibDonePrint = false;
 bool encoderCalibDonePrint = false;
+bool encoderResetDonePrint = false;
 
 odrive::ODriveSocketCan odrv;    
 
@@ -48,6 +49,7 @@ bool initDyrosBoltArgs(const DyrosBoltInitArgs &args)
 
     shm_msgs_->motorCalibSwitch = false;
     shm_msgs_->encoderCalibSwitch = false;
+    shm_msgs_->encoderResetSwitch = false;
 
 
     if (shm_msgs_->shutdown == true)
@@ -197,7 +199,7 @@ void *ethercatThread1(void *data)
                 }
             }
         }
-        if(encoderCalibDonePrint){
+        if(encoderCalibDonePrint && !encoderResetDonePrint){
             printf("encoder Calib Done\n");
         }
 
@@ -214,6 +216,10 @@ void *ethercatThread1(void *data)
                 odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
             }
             shm_msgs_->encoderResetSwitch = false;
+            encoderResetDonePrint = true;
+        }
+        if(encoderResetDonePrint){
+            printf("encoder Reset Done\n");
         }
 
         // ts.tv_nsec += init_args->period_ns + toff;
