@@ -27,6 +27,7 @@ volatile bool de_zp_sequence;
 bool fz_check = false;
 bool check_commutation = true;
 bool check_commutation_first = true;
+bool motorCalibDonePrint = false
 
 odrive::ODriveSocketCan odrv;    
 
@@ -172,11 +173,13 @@ void *ethercatThread1(void *data)
                 if(odrv.axis_current_state[i] == 0 && odrv.axis_error[i] == 0){
                     printf("Motor Calibration Done\n");
                     shm_msgs_->motorCalibSwitch = false;
+                    motorCalibDonePrint = true;
                 }
             }
             
         }
-        printf("Motor Calib Done\n");
+        if(motorCalibDonePrint)
+            printf("Motor Calib Done\n");
 
         //ANCHOR - encoder calibration
         if (shm_msgs_->encoderCalibSwitch)
