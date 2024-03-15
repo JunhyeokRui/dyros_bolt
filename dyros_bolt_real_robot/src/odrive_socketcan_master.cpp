@@ -150,20 +150,20 @@ void *ethercatThread1(void *data)
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
                     odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
             }
-            for(int id : odrv.axis_can_ids_list){
-                std::cout << "odrv.axis_current_state[id] : " << odrv.axis_current_state[id] << std::endl;
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                std::cout << "odrv.axis_current_state[i] : " << odrv.axis_current_state[i] << std::endl;
             }
-            for(int id : odrv.axis_can_ids_list){
-                std::cout << "odrv.axis_error[id] : " << odrv.axis_error[id] << std::endl;
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                std::cout << "odrv.axis_error[i] : " << odrv.axis_error[i] << std::endl;
             }
 
-            for(int id : odrv.axis_can_ids_list){
-                if(odrv.axis_current_state[id] != 0 || odrv.axis_error[id] == 0){
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                if(odrv.axis_current_state[i] != 0 || odrv.axis_error[i] == 0){
                     printf("Motor Calibration in Progress ...\n");
                 }
             }
-            for(int id : odrv.axis_can_ids_list){
-                if(odrv.axis_current_state[id] == 0 && odrv.axis_error[id] == 0){
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                if(odrv.axis_current_state[i] == 0 && odrv.axis_error[i] == 0){
                     printf("Motor Calibration Done\n");
                     shm_msgs_->motorCalibSwitch = false;
                 }
@@ -179,13 +179,13 @@ void *ethercatThread1(void *data)
                 odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
             }
             
-            for(int id : odrv.axis_can_ids_list){
-                if(odrv.axis_current_state[id] != 0 || odrv.axis_error[id] == 0){
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                if(odrv.axis_current_state[i] != 0 || odrv.axis_error[i] == 0){
                     printf("Encoder Calibration in Progress ...\n");    
                 }
             }
-            for(int id : odrv.axis_can_ids_list){
-                if(odrv.axis_current_state[id] == 0 && odrv.axis_error[id] == 0){
+            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+                if(odrv.axis_current_state[i] == 0 && odrv.axis_error[i] == 0){
                     printf("Encoder Calibration Done \n");    
                     shm_msgs_->encoderCalibSwitch = false;
                 }
