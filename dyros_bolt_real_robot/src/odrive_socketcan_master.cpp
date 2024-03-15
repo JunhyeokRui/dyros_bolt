@@ -27,7 +27,7 @@ volatile bool de_zp_sequence;
 bool fz_check = false;
 bool check_commutation = true;
 bool check_commutation_first = true;
-bool motorCalibDonePrint = false
+bool motorCalibDonePrint = false;
 
 odrive::ODriveSocketCan odrv;    
 
