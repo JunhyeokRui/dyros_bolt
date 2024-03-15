@@ -44,7 +44,9 @@ bool initDyrosBoltArgs(const DyrosBoltInitArgs &args)
     extencoder_init_flag_ = false;
 
     init_shm(shm_msg_key, shm_id_, &shm_msgs_);
-    // odrvInit();
+
+    shm_msgs_->motorCalibSwitch = false;
+
 
     if (shm_msgs_->shutdown == true)
     {

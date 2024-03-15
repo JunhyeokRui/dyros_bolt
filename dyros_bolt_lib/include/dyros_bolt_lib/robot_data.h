@@ -275,9 +275,6 @@ struct DataContainer
     bool ftcalibSwtich = false;
     bool handft_calib_signal_ = false;
     bool imuResetSwitch = false;
-    // bool encoderResetSwitch = false;
-    // bool encoderCalibSwitch = false;
-    // bool motorCalibSwitch = false;
     bool stateEstimateSwitch = false;
     bool safetyResetSwitch = false;
     bool fthandzeroSwtich = false;
