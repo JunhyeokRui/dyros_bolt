@@ -1,5 +1,5 @@
 <launch>
-    <arg name="gui" default="false" />
+    <arg name="gui" default="true" />
     <arg name="log" default="false"/>
     <arg name="init" default="false"/>
     <arg name="node_start_delay" default="0.2" />  
@@ -26,7 +26,7 @@
 
     <group if="$(arg gui)">
         <node name="dyros_bolt_gui" pkg="dyros_bolt_gui" type="dyros_bolt_gui" />
-        <node name="dyros_gui" pkg="dyros_gui" type="dyros_gui" />
+        <!-- <node name="dyros_gui" pkg="dyros_gui" type="dyros_gui" /> -->
     </group>
 
 </launch>

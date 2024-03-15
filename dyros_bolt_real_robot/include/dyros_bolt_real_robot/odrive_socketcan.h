@@ -107,7 +107,7 @@ namespace odrive {
             void setAxisRequestedState(int axis_can_id_, ODriveAxisState state);
             
             std::string axis_name_;
-            std::vector<int> axis_can_ids_list;
+            std::vector<int> axis_can_ids_list = {0, 1, 2, 3, 4, 5};
             
             int axis_error[6] = {0,0,0,0,0,0};
             int axis_current_state[6] = {0,0,0,0,0,0};

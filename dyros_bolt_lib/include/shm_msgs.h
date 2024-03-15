@@ -111,10 +111,16 @@ typedef struct SHMmsgs
     volatile bool controlModeUpper;
     volatile bool initializeModeLower;
     volatile bool initializeModeUpper;
+    volatile bool initializeDyrosBolt;
+    volatile bool motorCalibSwitch;
+    volatile bool encoderCalibSwitch;
+    volatile bool encoderResetSwitch;
     volatile bool safety_disable;
     volatile bool lower_disabled;
     volatile bool grav_signal;
     volatile bool pos_signal;
+    volatile bool odrvTorqueOn;
+    volatile bool odrvTorqueOff;
 
     int64_t std_timer_ns;
 
@@ -158,9 +164,11 @@ typedef struct SHMmsgs
     bool low_init_signal = false;
     bool waist_init_signal = false;
     bool upper_init_signal = false;
+    bool bolt_init_signal = false;
 
     volatile bool safety_reset_lower_signal;
     volatile bool safety_reset_upper_signal;
+    
     bool force_load_saved_signal = false;
     bool ecat_report = false;
 

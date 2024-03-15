@@ -164,6 +164,7 @@ void *StateManager::StateThread()
         GetCustomSimData(); 
         
         InitYaw();
+        // odrvMotorCalib();
         // std::cout << "!!SM-4!!" << std::endl;
         auto d1 = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - t1).count();
 
@@ -287,16 +288,7 @@ void *StateManager::StateThread()
                     cCount = dc_.tc_shm_->commandCount;
                     torqueRatio = 1.0;
 
-                    if (dc_.avatarMode)
-                    {
-                        dc_.inityawSwitch = true;
-                        dc_.stateEstimateSwitch = true;
-                        rd_gl_.semode = true;
-
-                        rd_gl_.tc_avatar_switch = true;
-
-                        rd_gl_.avatar_reboot_signal = true;
-                    }
+                    
                 }
             }
 
@@ -888,10 +880,11 @@ void StateManager::SendCommand()
     float control_time_at_ = rd_gl_.control_time_;
 
     if (dc_.torqueOnSwitch)
-    {
+    {   
         dc_.rd_.positionControlSwitch = true;
 
         dc_.torqueOnSwitch = false;
+        dc_.tc_shm_->odrvTorqueOn = true;
 
         if (dc_.torqueOn)
         {
@@ -912,11 +905,13 @@ void StateManager::SendCommand()
 
                 rd_gl_.tc_avatar_switch = true;
             }
+            
         }
     }
     if (dc_.torqueOffSwitch)
     {
         dc_.torqueOffSwitch = false;
+        dc_.tc_shm_->odrvTorqueOff = true;
 
         if (dc_.torqueOn)
         {
@@ -1061,7 +1056,7 @@ void StateManager::SendCommand()
     // dc_.tc_shm_->cmd_upper = true;
     // // std::fill(dc_.tc_shm_->commandMode, dc_.tc_shm_->commandMode + MODEL_DOF, 1);
     // std::copy(torque_command + 15, torque_command + MODEL_DOF, dc_.tc_shm_->torqueCommand + 15);
-    // dc_.tc_shm_->maxTorque = maxTorqueCommand;
+    dc_.tc_shm_->maxTorque = maxTorqueCommand;
     // // static int cCount = 0;
     // cCount++;
     // dc_.tc_shm_->commandCount.store(cCount);
@@ -2231,6 +2226,19 @@ void StateManager::PublishData()
     else
     {
         syspub_msg.data[0] = dc_.tc_shm_->imu_state;
+        if (dc_.tc_shm_->initializeDyrosBolt && !dc_.tc_shm_->controlModeUpper)
+        {
+            syspub_msg.data[1] = 1;
+        }
+        else if (dc_.tc_shm_->controlModeUpper && dc_.tc_shm_->initializeDyrosBolt)
+        {
+            syspub_msg.data[1] = 2;
+        }
+        else if (!dc_.tc_shm_->controlModeUpper && !dc_.tc_shm_->initializeDyrosBolt)
+        {
+            syspub_msg.data[1] = 0;
+        }
+
         if (dc_.tc_shm_->initializeModeUpper && !dc_.tc_shm_->controlModeUpper)
         {
             syspub_msg.data[1] = 1;
@@ -2408,7 +2416,19 @@ void StateManager::GuiCommandCallback(const std_msgs::StringConstPtr &msg)
     }
     else if (msg->data == "imureset")
     {
-        dc_.imuResetSwtich = true;
+        dc_.imuResetSwitch = true;
+    }
+    else if (msg->data == "encoderreset")
+    {
+        dc_.tc_shm_->encoderResetSwitch = true;
+    }
+    else if (msg->data == "encodercalib")
+    {
+        dc_.tc_shm_->encoderCalibSwitch = true;
+    }
+    else if (msg->data == "motorcalib")
+    {
+        dc_.tc_shm_->motorCalibSwitch = true;
     }
     else if (msg->data == "stateestimation")
     {   
@@ -2457,6 +2477,11 @@ void StateManager::GuiCommandCallback(const std_msgs::StringConstPtr &msg)
     {
         StatusPub("%f Initialize upper", control_time_);
         dc_.tc_shm_->upper_init_signal = true;
+    }
+    else if (msg->data == "ecatinit")
+    {
+        StatusPub("%f Initialize Dyros Bolt", control_time_);
+        dc_.tc_shm_->bolt_init_signal = true;
     }
     else if (msg->data == "disablelower")
     {
