@@ -150,6 +150,12 @@ void *ethercatThread1(void *data)
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
                     odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
             }
+            for(int id : odrv.axis_can_ids_list){
+                std::cout << "odrv.axis_current_state[id] : " << odrv.axis_current_state[id] << std::endl;
+            }
+            for(int id : odrv.axis_can_ids_list){
+                std::cout << "odrv.axis_error[id] : " << odrv.axis_error[id] << std::endl;
+            }
 
             for(int id : odrv.axis_can_ids_list){
                 if(odrv.axis_current_state[id] != 0 || odrv.axis_error[id] == 0){
