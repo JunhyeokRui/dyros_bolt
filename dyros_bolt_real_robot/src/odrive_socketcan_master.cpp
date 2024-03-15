@@ -838,6 +838,10 @@ bool areMotorsReady()
             std::cout << "motor is not ready" << std::endl;
             return false;
         }
+        else
+        {
+            std::cout << "motor ready" << std::endl;
+        }
     }
     return true;
 }
