@@ -833,7 +833,8 @@ int kbhit(void)
 
 bool areMotorsReady()
 {
-    for(int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    // for(int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
+    for(int i = 0; i < 1; i++) {
         if(odrv.axis_current_state[i] != 8) {
             std::cout << "motor is not ready" << std::endl;
             return false;
