@@ -593,7 +593,7 @@ void *ethercatThread1(void *data)
         
 //rui - /*send command*/
 
-        // writeDevice();
+        writeDevice();
         // if(odrv.areMotorsReady()){
         //     for(int i=0; i< DyrosBoltModel::HW_TOTAL_DOF / 2 - 1; i++)
         //     {
