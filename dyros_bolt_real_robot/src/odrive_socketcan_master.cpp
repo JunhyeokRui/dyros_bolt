@@ -148,6 +148,11 @@ void *ethercatThread1(void *data)
         if(shm_msgs_->motorCalibSwitch){
             printf("Motor Calib Pressed\n");
             std::cout << "odrv.axis_can_ids_list.size() : " << odrv.axis_can_ids_list.size() << std::endl;
+            for(int id : odrv.axis_can_ids_list) {
+                std::cout << "CAN ID: " << id << std::endl;
+            }
+
+
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
                     odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
             }
