@@ -176,6 +176,7 @@ void *ethercatThread1(void *data)
             }
             
         }
+        printf("Motor Calib Done\n");
 
         //ANCHOR - encoder calibration
         if (shm_msgs_->encoderCalibSwitch)
