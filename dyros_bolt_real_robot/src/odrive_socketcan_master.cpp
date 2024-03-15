@@ -28,6 +28,7 @@ bool fz_check = false;
 bool check_commutation = true;
 bool check_commutation_first = true;
 bool motorCalibDonePrint = false;
+bool encoderCalibDonePrint = false;
 
 odrive::ODriveSocketCan odrv;    
 
@@ -46,6 +47,7 @@ bool initDyrosBoltArgs(const DyrosBoltInitArgs &args)
     init_shm(shm_msg_key, shm_id_, &shm_msgs_);
 
     shm_msgs_->motorCalibSwitch = false;
+    shm_msgs_->encoderCalibSwitch = false;
 
 
     if (shm_msgs_->shutdown == true)
@@ -151,19 +153,9 @@ void *ethercatThread1(void *data)
         if(shm_msgs_->motorCalibSwitch){
             printf("Motor Calib Pressed\n");
             std::cout << "odrv.axis_can_ids_list.size() : " << odrv.axis_can_ids_list.size() << std::endl;
-            for(int id : odrv.axis_can_ids_list) {
-                std::cout << "CAN ID: " << id << std::endl;
-            }
-
 
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
                     odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
-            }
-            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                std::cout << "odrv.axis_current_state[i] : " << odrv.axis_current_state[i] << std::endl;
-            }
-            for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
-                std::cout << "odrv.axis_error[i] : " << odrv.axis_error[i] << std::endl;
             }
 
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
@@ -180,7 +172,7 @@ void *ethercatThread1(void *data)
             }
             
         }
-        if(motorCalibDonePrint){
+        if(motorCalibDonePrint && !encoderCalibDonePrint){
             printf("Motor Calib Done\n");
         }
 
@@ -201,8 +193,12 @@ void *ethercatThread1(void *data)
                 if(odrv.axis_current_state[i] == 0 && odrv.axis_error[i] == 0){
                     printf("Encoder Calibration Done \n");    
                     shm_msgs_->encoderCalibSwitch = false;
+                    encoderCalibDonePrint = true;
                 }
             }
+        }
+        if(encoderCalibDonePrint){
+            printf("encoder Calib Done\n");
         }
 
         // for(int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
