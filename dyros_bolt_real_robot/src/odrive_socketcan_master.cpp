@@ -173,7 +173,6 @@ void *ethercatThread1(void *data)
 
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
                     odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::MOTOR_CALIBRATION);
-                    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
             }
 
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
@@ -200,7 +199,6 @@ void *ethercatThread1(void *data)
             printf("Encoder Calib Pressed\n");
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
                 odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
-                clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
                 
             }
             
@@ -232,7 +230,6 @@ void *ethercatThread1(void *data)
             printf("Encoder Reset Pressed\n");
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
                 odrv.resetEncoder(i, odrive::ODriveCommandId::SET_ABSOLUTE_POSITION);
-                clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
             }
             shm_msgs_->encoderResetSwitch = false;
             encoderResetDonePrint = true;
@@ -652,7 +649,7 @@ void *ethercatThread1(void *data)
 
 
         // Wait until the next period.
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
+        // clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
 
         // Place your periodic task here.
 
