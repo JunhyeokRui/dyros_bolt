@@ -34,6 +34,8 @@
 
 #define PERIOD_NS 500000
 #define SEC_IN_NSEC 1000000000UL
+#define NSEC_PER_SEC    (1000000000) /* The number of nanoseconds per second. */
+
 
 #define FORCE_CONTROL_MODE false
 

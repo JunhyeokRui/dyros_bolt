@@ -139,13 +139,14 @@ void *ethercatThread1(void *data)
 
     while (!shm_msgs_->shutdown)
     {   
-        ts.tv_nsec += init_args->period_ns;
-        if (ts.tv_nsec >= SEC_IN_NSEC)
-        {
+        // Add the period to the current time.
+        ts.tv_nsec += period_ns;
+        while (ts.tv_nsec >= NSEC_PER_SEC) {
+            ts.tv_nsec -= NSEC_PER_SEC;
             ts.tv_sec++;
-            ts.tv_nsec -= SEC_IN_NSEC;
         }
-        printf("period_ns: %ld nano seconds CLOCK_MONOTONIC\n", ts.tv_nsec);
+
+        
 
         
 
@@ -645,7 +646,18 @@ void *ethercatThread1(void *data)
         //         txPDO[i]->targetTorque = (int)0;
         //     }
         // }
-        // clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
+
+
+        // Wait until the next period.
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
+
+        // Place your periodic task here.
+
+        // For demonstration: print the current loop time
+        // Note: Comment out or remove in production to avoid affecting timing
+        struct timespec current_time;
+        clock_gettime(CLOCK_MONOTONIC, &current_time);
+        printf("Loop at time: %ld.%03ld seconds\n", current_time.tv_sec, current_time.tv_nsec / 1000000);
         
 
 
