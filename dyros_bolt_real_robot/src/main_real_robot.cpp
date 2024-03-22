@@ -23,6 +23,7 @@ int main(int argc, char **argv)
     init_args.q_start_ = max_jnum;
     init_args.can_slave_num = 6;
     init_args.is_main = true;
+    init_args.period_ns = 1000 * 10000;
 
     struct sched_param param, param2;
     pthread_attr_t attr, attr2;

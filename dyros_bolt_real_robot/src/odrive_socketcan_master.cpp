@@ -4,6 +4,7 @@ int shm_id_;
 SHMmsgs *shm_msgs_;
 int Q_START = -1;
 int PART_CAN_DOF = -1;
+int period_ns = 0;
 float k_tau[MODEL_DOF] = {0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
 float torque_desired_[MODEL_DOF];
 float extencoder_offset_[MODEL_DOF];
@@ -128,13 +129,28 @@ void *ethercatThread1(void *data)
     //         }
     //         break;    
     // }
-
+    const int PRNS = init_args->period_ns;
+    period_ns = init_args->period_ns;
+    struct timespec ts;
+    struct timespec ts_start;
+    struct timespec ts_end;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    ts.tv_nsec += PRNS;
     if (shm_msgs_->shutdown)
         printf("Shutdown Command Before Start\n");
 
     while (!shm_msgs_->shutdown)
-    {
-        
+    {   
+        clock_gettime(CLOCK_MONOTONIC, &ts_start);
+        ts.tv_nsec += init_args->period_ns;
+        while (ts.tv_nsec >= SEC_IN_NSEC)
+        {
+            ts.tv_sec++;
+            ts.tv_nsec -= SEC_IN_NSEC;
+        }
+
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
+
         if (!shm_msgs_->shutdown)
             // printf(" REALROBOT : Control Mode Start ... \n");
         
@@ -184,7 +200,7 @@ void *ethercatThread1(void *data)
             printf("Encoder Calib Pressed\n");
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
                 odrv.setAxisRequestedState(odrv.axis_can_ids_list[i], odrive::ODriveAxisState::ENCODER_OFFSET_CALIBRATION);
-                clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
+                
             }
             
             for (int i = 0; i < odrv.axis_can_ids_list.size(); i++) {
@@ -631,6 +647,9 @@ void *ethercatThread1(void *data)
         //         txPDO[i]->targetTorque = (int)0;
         //     }
         // }
+        clock_gettime(CLOCK_MONOTONIC, &ts_end);
+        printf("Start: %ld seconds and End: %ld seconds CLOCK_MONOTONIC\n", ts_start.tv_sec, ts_end.tv_sec);
+
         
 
 
