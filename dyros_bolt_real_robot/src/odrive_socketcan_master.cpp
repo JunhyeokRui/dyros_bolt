@@ -150,7 +150,7 @@ void *ethercatThread1(void *data)
         }
         printf("period_ns: %ld seconds CLOCK_MONOTONIC\n", ts.tv_nsec);
 
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
+        
 
         if (!shm_msgs_->shutdown)
             // printf(" REALROBOT : Control Mode Start ... \n");
@@ -650,7 +650,7 @@ void *ethercatThread1(void *data)
         // }
         clock_gettime(CLOCK_MONOTONIC, &ts_end);
         printf("Start: %ld seconds and End: %ld seconds CLOCK_MONOTONIC\n", ts_start.tv_sec, ts_end.tv_sec);
-
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
         
 
 
