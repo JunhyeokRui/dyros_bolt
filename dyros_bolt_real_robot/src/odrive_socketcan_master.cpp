@@ -143,11 +143,12 @@ void *ethercatThread1(void *data)
     {   
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
         ts.tv_nsec += init_args->period_ns;
-        while (ts.tv_nsec >= SEC_IN_NSEC)
+        if (ts.tv_nsec >= SEC_IN_NSEC)
         {
             ts.tv_sec++;
             ts.tv_nsec -= SEC_IN_NSEC;
         }
+        printf("period_ns: %ld seconds CLOCK_MONOTONIC\n", ts.tv_nsec);
 
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
 
