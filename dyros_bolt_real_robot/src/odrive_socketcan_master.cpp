@@ -132,8 +132,6 @@ void *ethercatThread1(void *data)
     const int PRNS = init_args->period_ns;
     period_ns = init_args->period_ns;
     struct timespec ts;
-    struct timespec ts_start;
-    struct timespec ts_end;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     ts.tv_nsec += PRNS;
     if (shm_msgs_->shutdown)
@@ -141,14 +139,13 @@ void *ethercatThread1(void *data)
 
     while (!shm_msgs_->shutdown)
     {   
-        clock_gettime(CLOCK_MONOTONIC, &ts_start);
         ts.tv_nsec += init_args->period_ns;
         if (ts.tv_nsec >= SEC_IN_NSEC)
         {
             ts.tv_sec++;
             ts.tv_nsec -= SEC_IN_NSEC;
         }
-        printf("period_ns: %ld seconds CLOCK_MONOTONIC\n", ts.tv_nsec);
+        printf("period_ns: %ld nano seconds CLOCK_MONOTONIC\n", ts.tv_nsec);
 
         
 
@@ -648,8 +645,7 @@ void *ethercatThread1(void *data)
         //         txPDO[i]->targetTorque = (int)0;
         //     }
         // }
-        printf("Start: %ld seconds and End: %ld seconds CLOCK_MONOTONIC\n, %ld", ts_start.tv_nsec, ts_end.tv_nsec, ts_start.tv_nsec - ts_end.tv_nsec);
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
+        // clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
         
 
 
