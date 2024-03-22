@@ -648,8 +648,7 @@ void *ethercatThread1(void *data)
         //         txPDO[i]->targetTorque = (int)0;
         //     }
         // }
-        clock_gettime(CLOCK_MONOTONIC, &ts_end);
-        printf("Start: %ld seconds and End: %ld seconds CLOCK_MONOTONIC\n", ts_start.tv_sec, ts_end.tv_sec);
+        printf("Start: %ld seconds and End: %ld seconds CLOCK_MONOTONIC\n, %ld", ts_start.tv_nsec, ts_end.tv_nsec, ts_start.tv_nsec - ts_end.tv_nsec);
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &ts, NULL);
         
 
